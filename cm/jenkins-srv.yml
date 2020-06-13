@@ -3,6 +3,8 @@
 # https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
 
 - hosts: localhost
+  vars_files:
+    - jenkins-creds.yml
   roles:
     - ping
 
@@ -14,23 +16,19 @@
         update_cache: yes
       become: yes
 
-    - name: get jenkins public key
-      shell: wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+    - name: get and apply the jenkins repository public key
+      apt_key:
+        url: https://pkg.jenkins.io/debian/jenkins.io.key
+        state: present
+      become: yes
 
-#    - name: append binary install link to /etc/apt/sources.list
-#      blockinfile:
-#        path: /etc/apt/sources.list
-#        block: |
-#          deb https://pkg.jenkins.io/debian-stable binary/
-#      become: yes
-
-    - name: Create the jenkins post configuration directory
+    - name: Create directory for jenkins binary source location
       file:
         path: /etc/apt/sources.list.d
         state: directory
       become: yes
 
-    - name: Template the post
+    - name: Template the jenkins binary source location file
       template:
         src: jenkins_binary
         dest: /etc/apt/sources.list.d/jenkins.list
@@ -49,7 +47,7 @@
         update_cache: yes
       become: yes
 
-    - name: Set up the database driver config.json file for user password and ip address
+    - name: Set jenkins server to expose on port 9000
       replace:
         path: /etc/default/jenkins
         regexp: 'HTTP_PORT=8080'
@@ -62,7 +60,7 @@
         state: directory
       become: yes
 
-    - name: Template the post configuration script to /var/lib/jenkins/init.groovy.d
+    - name: Template the post configuration script to post configuration directory
       template:
         src: jenkins_config
         dest: /var/lib/jenkins/init.groovy.d/basic-security.groovy
@@ -70,7 +68,24 @@
         mode: u=rwx,g=r,o=r
       become: yes
 
-    - name: start up jenks
+    - name: find the admin config file directory
+      find:
+        paths: /var/lib/jenkins/users
+        recurse: no
+        use_regex: true
+        patterns: '^admin'
+        file_type: directory
+      register: admin_directory
+      become: yes
+
+    - name: Set password for admin user
+      replace:
+        path: "{{ admin_directory.files[0].path }}/config.xml"
+        regexp: '<passwordHash>#jbcrypt:\S+</passwordHash>'
+        replace: "<passwordHash>#jbcrypt:{{ admin_password }}</passwordHash>"
+      become: yes
+
+    - name: restart jenkins
       systemd:
         state: restarted
         name: jenkins
