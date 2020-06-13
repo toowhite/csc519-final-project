@@ -1,0 +1,77 @@
+---
+# see the best practices in ansible docs for how to get started with creating roles etc.:
+# https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
+
+- hosts: localhost
+  roles:
+    - ping
+
+  tasks:
+
+    - name: install openjdk08
+      apt:
+        name: openjdk-8-jdk
+        update_cache: yes
+      become: yes
+
+    - name: get jenkins public key
+      shell: wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+
+#    - name: append binary install link to /etc/apt/sources.list
+#      blockinfile:
+#        path: /etc/apt/sources.list
+#        block: |
+#          deb https://pkg.jenkins.io/debian-stable binary/
+#      become: yes
+
+    - name: Create the jenkins post configuration directory
+      file:
+        path: /etc/apt/sources.list.d
+        state: directory
+      become: yes
+
+    - name: Template the post
+      template:
+        src: jenkins_binary
+        dest: /etc/apt/sources.list.d/jenkins.list
+        owner: bin
+        mode: u=rwx,g=r,o=r
+      become: yes
+
+    - name: Run the equivalent of "apt-get update" as a separate step
+      apt:
+        update_cache: yes
+      become: yes
+
+    - name: install jenkins server
+      apt:
+        name: jenkins
+        update_cache: yes
+      become: yes
+
+    - name: Set up the database driver config.json file for user password and ip address
+      replace:
+        path: /etc/default/jenkins
+        regexp: 'HTTP_PORT=8080'
+        replace: 'HTTP_PORT=9000'
+      become: yes
+
+    - name: Create the jenkins post configuration directory
+      file:
+        path: /var/lib/jenkins/init.groovy.d
+        state: directory
+      become: yes
+
+    - name: Template the post configuration script to /var/lib/jenkins/init.groovy.d
+      template:
+        src: jenkins_config
+        dest: /var/lib/jenkins/init.groovy.d/basic-security.groovy
+        owner: bin
+        mode: u=rwx,g=r,o=r
+      become: yes
+
+    - name: start up jenks
+      systemd:
+        state: restarted
+        name: jenkins
+      become: yes
