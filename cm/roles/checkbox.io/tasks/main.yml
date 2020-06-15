@@ -1,0 +1,15 @@
+---
+- name: Import the MongoDB public GPG Key 
+  become: yes
+  shell: wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+
+- name: Create a list file for MongoDB
+  become: yes
+  shell: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+
+- name: Install mongodb and nodejs
+  become: yes
+  apt:
+    name: [mongodb-org, nodejs]
+    state: present
+    update_cache: yes
