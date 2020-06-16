@@ -5,8 +5,8 @@
 - hosts: localhost
   vars_files:
     - jenkins-creds.yml
-  roles:
-    - ping
+  # roles:
+  #   - ping
 
   tasks:
 
