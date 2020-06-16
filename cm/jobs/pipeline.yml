@@ -1,0 +1,17 @@
+- scm:
+    name: first-scm
+    scm:
+      - git:
+         url: https://github.com/chrisparnin/checkbox.io
+         branches:
+          - origin/master
+          
+- builder:
+    name: install-npm
+    builders:
+      - shell: 'npm install'
+
+- job:
+    name: invoke-install-npm
+    builders:
+      - install-npm
