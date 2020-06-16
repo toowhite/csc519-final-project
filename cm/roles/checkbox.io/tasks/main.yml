@@ -7,9 +7,59 @@
   become: yes
   shell: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
 
-- name: Install mongodb and nodejs
+- name: Install dependencies (apt)
   become: yes
   apt:
-    name: [mongodb-org, nodejs]
+    name: [python-pip, mongodb-org, nodejs]
     state: present
     update_cache: yes
+
+- name: Install dependencies (pip)
+  become: yes
+  pip:
+    name: [pymongo, jenkins-job-builder]
+
+- name: Ensure mongodb running
+  become: yes
+  systemd: name=mongod state=started
+
+- name: Create mongo admin user and db
+  become: yes
+  mongodb_user:
+    database: admin
+    name: admin
+    password: "fdU&4203N^"
+    state: present
+
+- name: Create mongo checkbox.io user and db
+  become: yes
+  mongodb_user:
+    database: checkbox_io
+    name: checkbox_io
+    password: "866JUtmfUF"
+    login_user: admin
+    login_password: "fdU&4203N^"
+    state: present
+    roles: readWrite
+
+- name: Populate /etc/environment
+  become: yes
+  lineinfile:
+    dest: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value}}"
+  with_items:
+    - key: APP_PORT 
+      value: 3002
+    - key: MONGO_PORT 
+      value: 27017
+    - key: MONGO_USER 
+      value: checkbox_io
+    - key: MONGO_PASSWORD 
+      value: "866JUtmfUF"
+    - key: MONGO_IP 
+      value: localhost
+
+- name: Source the /etc/environment file
+  shell: . /etc/environment
