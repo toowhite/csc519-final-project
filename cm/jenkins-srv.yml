@@ -123,7 +123,7 @@
 
     - name: Install plugin
       jenkins_plugin:
-        name: {{ item }}
+        name: "{{ item }}"
         state: present
         force: yes
         timeout: 300
