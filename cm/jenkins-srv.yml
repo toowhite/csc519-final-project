@@ -65,6 +65,20 @@
         mode: u=rwx,g=r,o=r
       become: yes
 
+    - name: Create the jenkins pipeline config directory
+      file:
+        path: /etc/jenkins_jobs
+        state: directory
+      become: yes
+
+    - name: Template pipeline configuration file
+      template:
+        src: jenkins_jobs.ini
+        dest: /etc/jenkins_jobs/jenkins_jobs.ini
+        owner: bin
+        mode: u=rwx,g=r,o=r
+      become: yes
+
     - name: find the admin config file directory
       find:
         paths: /var/lib/jenkins/users
