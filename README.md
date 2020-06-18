@@ -1,6 +1,6 @@
 # DevOps-1
 
-from project root directory, these commands can execute the environment:
+from project root directory, these commands can execute the environment. The playbook creates a build environment for checkbox.io
 - npm install
 - npm link
 - pipeline setup
