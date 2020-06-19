@@ -1,0 +1,71 @@
+---
+- name: find the admin config file directory
+  find:
+    paths: /var/lib/jenkins/users
+    recurse: no
+    use_regex: true
+    patterns: '^admin'
+    file_type: directory
+  register: admin_directory
+  become: yes
+
+- name: Set password for admin user
+  replace:
+    path: "{{ admin_directory.files[0].path }}/config.xml"
+    regexp: '<passwordHash>#jbcrypt:\S+</passwordHash>'
+    replace: "<passwordHash>#jbcrypt:{{ admin_password_hash }}</passwordHash>"
+  become: yes
+
+- name: Set jenkins server to expose on port 9000
+  replace:
+    path: /etc/default/jenkins
+    regexp: 'HTTP_PORT=8080'
+    replace: 'HTTP_PORT=9000'
+  become: yes
+
+- name: restart jenkins
+  systemd:
+    state: restarted
+    name: jenkins
+  become: yes
+
+- name: Wait for Jenkins to start up
+  uri:
+    url: http://192.168.33.20:9000
+    status_code: 200
+    user: admin
+    password: "{{ admin_password }}"
+    timeout: 5
+    force_basic_auth: yes
+  register: jenkins_service_status
+  retries: 10
+  delay: 5
+  until: >
+    'status' in jenkins_service_status and
+    jenkins_service_status['status'] == 200
+
+- name: Check Jenkins status
+  debug:
+    msg: "Jenkins status: {{ jenkins_service_status['status'] }}"
+
+- name: Install plugin
+  jenkins_plugin:
+    name: "{{ item }}"
+    state: present
+    force: yes
+    timeout: 300
+    url: http://192.168.33.20:9000
+    url_username: admin
+    url_password: "{{ admin_password }}"
+  when: jenkins_service_status['status'] == 200
+  become: yes
+  with_items:
+    - workflow-aggregator
+    - nodejs
+    - git
+
+- name: restart jenkins
+  systemd:
+    state: restarted
+    name: jenkins
+  become: yes

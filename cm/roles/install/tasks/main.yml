@@ -1,0 +1,38 @@
+---
+
+- name: install openjdk08
+  apt:
+    name: openjdk-8-jdk
+    update_cache: yes
+  become: yes
+
+- name: get and apply the jenkins repository public key
+  apt_key:
+    url: https://pkg.jenkins.io/debian/jenkins.io.key
+    state: present
+  become: yes
+
+- name: Create directory for jenkins binary source location
+  file:
+    path: /etc/apt/sources.list.d
+    state: directory
+  become: yes
+
+- name: Template the jenkins binary source location file
+  template:
+    src: jenkins_binary
+    dest: /etc/apt/sources.list.d/jenkins.list
+    owner: bin
+    mode: u=rwx,g=r,o=r
+  become: yes
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: install jenkins server
+  apt:
+    name: jenkins
+    update_cache: yes
+  become: yes

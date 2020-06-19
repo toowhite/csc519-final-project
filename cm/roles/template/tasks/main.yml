@@ -1,0 +1,28 @@
+---
+- name: Create the jenkins post configuration directory
+  file:
+    path: /var/lib/jenkins/init.groovy.d
+    state: directory
+  become: yes
+
+- name: Template the post configuration script to post configuration directory
+  template:
+    src: jenkins_config
+    dest: /var/lib/jenkins/init.groovy.d/basic-security.groovy
+    owner: bin
+    mode: u=rwx,g=r,o=r
+  become: yes
+
+- name: Create the jenkins pipeline config directory
+  file:
+    path: /etc/jenkins_jobs
+    state: directory
+  become: yes
+
+- name: Template pipeline configuration file
+  template:
+    src: jenkins_jobs.ini
+    dest: /etc/jenkins_jobs/jenkins_jobs.ini
+    owner: bin
+    mode: u=rwx,g=r,o=r
+  become: yes
