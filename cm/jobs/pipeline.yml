@@ -5,12 +5,17 @@
       node {
           stage('Source') {
               git 'https://github.com/chrisparnin/checkbox.io.git'
-          }
+          } 
           stage('Build') {
-              sh 'ls /var/lib/jenkins/workspace/pipeline'
-              sh 'npm install'
+              sh 'pwd'
+              sh 'npm cache clean'
+              sh 'cd server-side/site && npm install'
           }
-          stage('Test') {
-              sh 'npm test'
+          stage('mongodb') {
+              sh 'service mongod status'
+          }
+          stage('start server-side server') {
+              sh 'cd server-side/site && node server.js &'
+              sh "cd server-side/site && npm test"
           }
       }
