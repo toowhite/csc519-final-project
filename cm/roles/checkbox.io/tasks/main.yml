@@ -10,7 +10,7 @@
 - name: Install dependencies (apt)
   become: yes
   apt:
-    name: [python-pip, mongodb-org, nodejs]
+    name: [python-pip, mongodb-org, nodejs, npm]
     state: present
     update_cache: yes
 
