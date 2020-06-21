@@ -50,4 +50,6 @@ async function run(privateKey) {
     console.log(chalk.blueBright('Running init script...'));
     result = sshSync('/bakerx/cm/server-init.sh', 'vagrant@192.168.33.20');
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
+
+    console.log(chalk.blueBright("Setup completes. Open jenkins at http://192.168.33.20:9000"));
 }

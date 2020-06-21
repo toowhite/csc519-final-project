@@ -4,9 +4,10 @@
 
 - hosts: localhost
   vars_files:
-    - jenkins-creds.yml
+    - creds.yml
 
   roles:
     - install
     - template
     - config
+    - checkbox.io
