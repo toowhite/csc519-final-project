@@ -21,26 +21,30 @@
 
 - name: Ensure mongodb running
   become: yes
-  systemd: name=mongod state=started
+  systemd: 
+    name: mongod
+    state: started
 
 - name: Create mongo admin user and db
   become: yes
   mongodb_user:
     database: admin
-    name: admin
-    password: "fdU&4203N^"
+    name: "{{ mongodb_admin_user }}"
+    password: "{{ mongodb_admin_password }}"
     state: present
+  no_log: true
 
 - name: Create mongo checkbox.io user and db
   become: yes
   mongodb_user:
     database: checkbox_io
-    name: checkbox_io
-    password: "866JUtmfUF"
-    login_user: admin
-    login_password: "fdU&4203N^"
+    name: "{{ mongodb_app_user }}"
+    password: "{{ mongodb_app_password }}"
+    login_user: "{{ mongodb_admin_user }}"
+    login_password: "{{ mongodb_admin_password }}"
     state: present
     roles: readWrite
+  no_log: true
 
 - name: Populate /etc/environment
   become: yes
@@ -49,15 +53,16 @@
     state: present
     regexp: "^{{ item.key }}="
     line: "{{ item.key }}={{ item.value}}"
+  no_log: false
   with_items:
     - key: APP_PORT 
       value: 3002
     - key: MONGO_PORT 
       value: 27017
     - key: MONGO_USER 
-      value: checkbox_io
+      value: "{{ mongodb_app_user }}"
     - key: MONGO_PASSWORD 
-      value: "866JUtmfUF"
+      value: "{{ mongodb_app_password }}"
     - key: MONGO_IP 
       value: localhost
 
