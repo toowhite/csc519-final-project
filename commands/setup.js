@@ -42,10 +42,10 @@ async function run(privateKey) {
     result = scpSync (identifyFile, 'vagrant@192.168.33.20:/home/vagrant/.ssh/mm_rsa');
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
-    console.log(chalk.blueBright('copying over vault password file to jenkins server'));
-    let vaultPasswordFile = path.join(os.homedir(), '.ansible', '.vault-pass');
-    result = scpSync (vaultPasswordFile, 'vagrant@192.168.33.20:/home/vagrant/.vault-pass');
-    if( result.error ) { console.log(result.error); process.exit( result.status ); }
+    // console.log(chalk.blueBright('copying over vault password file to jenkins server'));
+    // let vaultPasswordFile = path.join(os.homedir(), '.ansible', '.vault-pass');
+    // result = scpSync (vaultPasswordFile, 'vagrant@192.168.33.20:/home/vagrant/.vault-pass');
+    // if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright('Running init script...'));
     result = sshSync('/bakerx/cm/server-init.sh', 'vagrant@192.168.33.20');
