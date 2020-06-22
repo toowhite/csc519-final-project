@@ -1,6 +1,7 @@
 - job:
     name: checkbox.io
     project-type: pipeline
+    auth-token: token
     dsl: |
         node {
             stage('Source') {
