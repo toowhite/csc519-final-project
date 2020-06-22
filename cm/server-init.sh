@@ -14,6 +14,7 @@ sudo apt-get install ansible -y
 
 # Ensure security key has proper permissions
 chmod 700 ~/.ssh/mm_rsa
+chmod +x /bakerx/cm/run-jenkins-job.sh
 
 PASSFILE=/home/vagrant/.vault-pass
 ansible-playbook /bakerx/cm/setup.yml --vault-password-file=$PASSFILE
