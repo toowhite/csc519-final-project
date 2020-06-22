@@ -2,20 +2,26 @@
     name: checkbox.io
     project-type: pipeline
     dsl: |
-      node {
-          stage('Source') {
-              git 'https://github.com/chrisparnin/checkbox.io.git'
-          } 
-          stage('Build') {
-              sh 'pwd'
-              sh 'npm cache clean'
-              sh 'cd server-side/site && npm install'
-          }
-          stage('mongodb') {
-              sh 'service mongod status'
-          }
-          stage('start server-side server') {
-              sh 'cd server-side/site && node server.js &'
-              sh "cd server-side/site && npm test"
-          }
-      }
+        node {
+            stage('Source') {
+                git 'https://github.com/chrisparnin/checkbox.io.git'
+            } 
+            stage('Build') {
+                sh 'echo "MONGO_PORT=$MONGO_PORT"'
+                sh 'echo "MONGO_IP=$MONGO_IP"'
+                sh 'echo "MONGO_USER=$MONGO_USER"'
+                sh 'echo "MONGO_PASSWORD=$MONGO_PASSWORD"'
+                sh 'echo "APP_PORT=$APP_PORT"'
+                dir("server-side/site") {
+                    sh 'pwd'
+                    sh 'npm cache clean'
+                    sh 'npm install' 
+                }
+            }
+            stage('Start server and test') {
+                dir("server-side/site") {
+                    sh 'node server.js &'
+                    sh "npm test"
+                }
+            }
+        }

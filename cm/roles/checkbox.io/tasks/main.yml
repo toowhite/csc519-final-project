@@ -25,26 +25,28 @@
     name: mongod
     state: started
 
-- name: Create mongo admin user and db
+- name: Create mongo root user and admin db
   become: yes
   mongodb_user:
     database: admin
     name: "{{ mongodb_admin_user }}"
     password: "{{ mongodb_admin_password }}"
+    # login_user: "{{ mongodb_admin_user }}"
+    # login_password: "{{ mongodb_admin_password }}"
     state: present
-  no_log: true
+    roles: root
 
 - name: Create mongo checkbox.io user and db
   become: yes
   mongodb_user:
-    database: checkbox_io
+    database: admin
     name: "{{ mongodb_app_user }}"
     password: "{{ mongodb_app_password }}"
     login_user: "{{ mongodb_admin_user }}"
     login_password: "{{ mongodb_admin_password }}"
     state: present
-    roles: readWrite
-  no_log: true
+    roles: 
+      - { "db": "site", "role": "readWrite"}
 
 - name: Populate /etc/environment
   become: yes
@@ -68,3 +70,9 @@
 
 - name: Source the /etc/environment file
   shell: . /etc/environment
+
+- name: restart jenkins (to ensure read latest envs)
+  systemd:
+    state: restarted
+    name: jenkins
+  become: yes

@@ -18,4 +18,4 @@ set -x
 PLAYBOOK=$1
 # INVENTORY=$2
 
-ansible-playbook $PLAYBOOK
+ansible-playbook -vvv $PLAYBOOK
