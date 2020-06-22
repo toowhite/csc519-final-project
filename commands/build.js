@@ -4,30 +4,51 @@ const chalk = require('chalk');
 
 const sshSync = require('../lib/ssh');
 
-
 exports.command = 'build <jobName>';
 exports.desc = 'Build a specified job';
 exports.builder = yargs => {
-    yargs.options({
-    });
+	yargs.options({
+		jobName: {
+			describe: "The target job name that should be built",
+			type: 'string'
+		},
+		username: {
+			alias: 'u',
+			describe: 'Jenkins user',
+			type: 'string',
+			default: 'admin'
+		},
+		password: {
+			alias: 'p',
+			describe: 'Jenkins password',
+			type: 'string',
+			default: 'admin'
+		},
+		url: {
+			alias: 'l',
+			describe: 'Jenkins URL',
+			type: 'string',
+			default: '192.168.33.20:9000'
+		}
+	});
 };
 
 
 exports.handler = async argv => {
-    const { jobName } = argv;
+    const { jobName, username, password, url } = argv;
 
     (async () => {
-        run(jobName);
+        run(jobName, username, password, url);
     })();
 
 };
 
-async function run(jobName) {
+async function run(jobName, username, password, url) {
     console.log(chalk.blueBright(`You are going to build job ${jobName}`));
     let result = sshSync(`/bakerx/cm/run-jenkins-job.sh ${jobName}`, 'vagrant@192.168.33.20');
     if( result.error ) { process.exit( result.status ); }
-	var jenkins = require('jenkins')({ baseUrl: 'http://admin:admin@192.168.33.20:9000', crumbIssuer: true });
-	jenkins.job.build({ name: 'checkbox.io', token: 'token' }, function(err, id) {
+	var jenkins = require('jenkins')({ baseUrl: `http://${username}:${password}@${url}`, crumbIssuer: true });
+	jenkins.job.build({ name: jobName, token: 'token' }, function(err, id) {
 		if (err) throw err;
 		waitOnQueue(id);
     });
@@ -51,7 +72,7 @@ async function run(jobName) {
 
 
 	function logstream() {
-		var log = jenkins.build.logStream('checkbox.io', 'lastBuild');
+		var log = jenkins.build.logStream(jobName, 'lastBuild');
 		log.on('data', function(text) {
 			process.stdout.write(text);
 		});
