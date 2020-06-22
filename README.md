@@ -34,3 +34,13 @@ From project root directory, these commands can be executed:
 - I learned how to communicate effectively with other teammates using Mattermost and Zoom.
 
 ### Pipeline (Qingyan Wang)
+
+- I have learned the work idea of Jenkins authenticating configuration (DevOps-1/cm/roles/template/templates/jenkins_jobs.ini), the idea and purpose of Jenkins pipeline in groovy script. Some working attributes cannot be used by pipeline stype project for Jenkins, such as scm and builder, so we spent some time to figure out which attributes can work with pipeline.
+
+- There are many Jenkins plugin that can be used to enhance the functionality of Jenkins to satisfy users' customization in developing environment. We have used workflow-aggregator, nodejs and git plugin in our project.
+
+- It is better to setup the environment and install necessary packages before any Jenkins pipeline function. Because to install packages through pipeline, the user needs to be a sudoer to get permission of editing environment, otherwise the Jenkins will have "no tty present and no askpass program specified" error. Changing the sudoer files to get rid of the error is doable, but then Jenkins server can be modified by user without asking any permission, which means low security.
+
+- I firstly used curl command to do the Jenkins build trigger. It needs to have a authentication token, a cromb, username and password to trigger the build to start, but then it comes out that this is done by sending http request, and http request cannot send back log file to console. In the late phase of this project, we switch to NPM Jenkins package, which can build job and get logstream using js code.
+
+- I got good teamwork experience in this project.
