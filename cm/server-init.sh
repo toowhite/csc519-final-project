@@ -15,8 +15,5 @@ sudo apt-get install ansible -y
 # Ensure security key has proper permissions
 chmod 700 ~/.ssh/mm_rsa
 
-# Create the needed password file with specified password
 PASSFILE=/home/vagrant/.vault-pass
-echo "csc-devops-2020" > $PASSFILE
-
 ansible-playbook /bakerx/cm/setup.yml --vault-password-file=$PASSFILE
