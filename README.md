@@ -1,4 +1,7 @@
 # DevOps-1
+## Screencast 
+
+Link here.
 
 ## Commands
 From project root directory, these commands can be executed:
@@ -25,11 +28,11 @@ From project root directory, these commands can be executed:
 ### Build environment (Zhuowei Li)
 - I learned what dependencies need to be installed. Some of them I know directly from documents, while some I figure out by communicating with teammates and trying in practice. 
 
-- I learned the basic user and database management of mongodb to figure out what need to be setup for it to work. At first I had misunderstanding about how mongodb authentication and permissions work and had a hard time to make it work. The incorrect setup of mongodb caused tests of the app to fails, which gave me hint that the connection string the app uses does not work and my understanding is wrong. Finally by reading document carefully I figured out that the user permission stuff should be set under `admin` database and therefore resolve the problem.
+- I learned the basic user and database management of mongodb to figure out what need to be setup. At first I had misunderstanding about how mongodb authentication and permissions work and create the user in a wrong database. The incorrect setup causes tests of the app to fails, which gave me hint that the db connection does not work and my understanding is wrong. Finally by reading document carefully I figured out that the user permission stuff should be set under `admin` database and therefore resolve the problem.
 
-- I learned how to handle secrets correctly in the project context. At first I misunderstand what is said in the project specification and wrongly committed the vault password. With the help of Andrew, TA and  Professor finally I realized the correct way and was able to make the changes.
+- I learned how to handle secrets correctly in the project context. At first I misunderstanded what is said in the project specification and wrongly committed the vault password. With the help of Andrew, TA and Professor I realized the correct way and was able to make the changes.
 
-- I learned and gained experience on how to manage the project using Github Project facilities. 
+- I learned and gained experience on how to manage the project using Github Project issue board. 
 
 - I learned how to communicate effectively with other teammates using Mattermost and Zoom.
 
