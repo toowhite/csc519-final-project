@@ -20,7 +20,7 @@ From project root directory, these commands can be executed:
     Update the pipeline code and trigger a build.
 
 ## Experience
-### Jenkins (Andrew Hiller)
+### Jenkins (Andrew Miller)
 
 ### Build environment (Zhuowei Li)
 - I learned what dependencies need to be installed. Some of them I know directly from documents, while some I figure out by communicating with teammates and trying in practice. 
