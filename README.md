@@ -24,6 +24,13 @@ From project root directory, these commands can be executed:
 
 ## Experience
 ### Jenkins (Andrew Miller)
+- I learned how extraordinarily tricky it can be to automate the installation of a server like Jenkins on a remote server, which typically requires a manual setup process via a setup wizard. This required a great deal of templating and editing files on the remote server after creating an environment in which to install the Jenkins server. At this point, I have a deep admiration for Ansible, which made most of the heavy lifting chores a breeze. However, Ansible was particularly brilliant in neatly facilitating some of the more nuanced tasks, such as first searching for and then applying changes to a configuration file on the remote file system.
+
+- I spent a great deal of time researching how to carry out the steps of the Jenkins setup wizard in an automated fashion. One of the greatest challenges was understanding how to set up the admin user for a particular username and password. Overall the automated setup of a Jenkins server was an epic learning experience, as it was essentially more of an open problem that required a great deal of research, experimentation and careful troubleshooting.
+
+- I also learned how to remotely set up, trigger, and log the output of a Jenkins build. This was thankfully made simpler by the use of the Jenkins NPM plugin. However, we did have to overcome the challenge of waiting to print the log of the build until the build was actually in an executing state.
+
+- I had an excellent experience collaborating with my teammates, and feel that we were able to work cohesively to complete the project.
 
 ### Build environment (Zhuowei Li)
 - I learned what dependencies need to be installed. Some of them I know directly from documents, while some I figure out by communicating with teammates and trying in practice. 
