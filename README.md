@@ -1,7 +1,7 @@
 # DevOps-1
 ## Screencast 
 
-Link here.
+https://drive.google.com/file/d/1hi6hP5PlqW6-jEDKOyBDMjSNYoPcPMuY/view?usp=sharing
 
 ## Commands
 From project root directory, these commands can be executed:
