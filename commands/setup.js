@@ -13,7 +13,19 @@ exports.builder = yargs => {
         privateKey: {
             describe: 'Install the provided private key on the configuration server',
             type: 'string'
-        }
+        },
+		ghuser: {
+			alias: '-gh-user',
+			describe: 'github user',
+			type: 'string',
+			default: 'admin'
+		},
+		ghpass: {
+			alias: '-gh-pass',
+			describe: 'gitub password',
+			type: 'string',
+			default: 'admin'
+		},
     });
 };
 

@@ -44,7 +44,7 @@ exports.handler = async argv => {
 };
 
 async function run(jobName, username, password, url) {
-    console.log(chalk.blueBright(`You are going to build job ${jobName}`));
+    console.log(chalk.blueBright(`You are going to build job iTrust`));
     let result = sshSync(`/bakerx/cm/run-jenkins-job.sh ${jobName}`, 'vagrant@192.168.33.20');
     if( result.error ) { process.exit( result.status ); }
 	var jenkins = require('jenkins')({ baseUrl: `http://${username}:${password}@${url}`, crumbIssuer: true });
