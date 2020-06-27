@@ -25,7 +25,7 @@ exports.builder = yargs => {
 			describe: 'gitub password',
 			type: 'string',
 			default: 'admin'
-		},
+		}
     });
 };
 
