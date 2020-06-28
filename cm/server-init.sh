@@ -11,7 +11,6 @@ sudo add-apt-repository ppa:ansible/ansible -y
 sudo apt-get update
 sudo apt-get upgrade --assume-yes
 sudo apt-get install ansible -y
-sudo apt-get install jq -y
 
 # Ensure security key has proper permissions
 chmod 700 ~/.ssh/mm_rsa
