@@ -18,13 +18,11 @@ exports.builder = yargs => {
 			alias: 'gh-user',
 			describe: 'github user',
 			type: 'string',
-			default: 'admin'
 		},
 		ghpass: {
 			alias: 'gh-pass',
-			describe: 'gitub password',
+			describe: 'github password',
 			type: 'string',
-			default: 'admin'
 		}
     });
 };
