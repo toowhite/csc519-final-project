@@ -3,7 +3,7 @@
 - name: Install mysql 5.7
   become: yes
   apt:
-    name: [mysql-server, python3-pymysql]
+    name: [mysql-server, python3-pymysql, jq]
     state: present
     update_cache: yes
 
