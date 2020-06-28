@@ -15,13 +15,13 @@ exports.builder = yargs => {
             type: 'string'
         },
 		ghuser: {
-			alias: '-gh-user',
+			alias: 'gh-user',
 			describe: 'github user',
 			type: 'string',
 			default: 'admin'
 		},
 		ghpass: {
-			alias: '-gh-pass',
+			alias: 'gh-pass',
 			describe: 'gitub password',
 			type: 'string',
 			default: 'admin'
@@ -41,8 +41,9 @@ exports.handler = async argv => {
 
 };
 
-async function run(privateKey) {
-
+async function run(privateKey, ghuser, ghpass) {
+	process.env['GHUSER'] = ghuser;
+	process.env['GHPASS'] = ghpass;
     console.log(chalk.greenBright('Installing jenkins server!'));
 
     console.log(chalk.blueBright('Provisioning jenkins server...'));
@@ -64,4 +65,5 @@ async function run(privateKey) {
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright("Setup completes. Open jenkins at http://192.168.33.20:9000"));
+
 }
