@@ -1,7 +1,4 @@
-const fs = require('fs');
-const path = require('path');
 const chalk = require('chalk');
-
 const sshSync = require('../lib/ssh');
 
 exports.command = 'build <jobName>';
@@ -35,53 +32,54 @@ exports.builder = yargs => {
 
 
 exports.handler = async argv => {
-    const { jobName, username, password, url } = argv;
+	const { jobName, username, password, url } = argv;
 
-    (async () => {
-        run(jobName, username, password, url);
-    })();
+	(async () => {
+		run(jobName, username, password, url);
+	})();
 
 };
 
 async function run(jobName, username, password, url) {
-    console.log(chalk.blueBright(`You are going to build job ${jobName}`));
-    let result = sshSync(`/bakerx/cm/run-jenkins-job.sh ${jobName}`, 'vagrant@192.168.33.20');
-    if( result.error ) { process.exit( result.status ); }
+	console.log(chalk.blueBright(`You are going to build job ${jobName}`));
+	let result = sshSync(`/bakerx/cm/run-jenkins-job.sh ${jobName}`, 'vagrant@192.168.33.20');
+	if (result.error) { process.exit(result.status); }
+
 	var jenkins = require('jenkins')({ baseUrl: `http://${username}:${password}@${url}`, crumbIssuer: true });
-	jenkins.job.build({ name: jobName, token: 'token' }, function(err, id) {
+	jenkins.job.build({ name: jobName, token: 'token' }, function (err, id) {
 		if (err) throw err;
 		waitOnQueue(id);
-    });
-	
+	});
+
 	function waitOnQueue(id) {
-		jenkins.queue.item(id, function(err, item) {
-		if (err) throw err;
-		if (item.executable) {
-			console.log('number:', item.executable.number);
-			logstream();
-	
-		} else if (item.cancelled) {
-			console.log('cancelled');
-		} else {
-			setTimeout(function() {
-			waitOnQueue(id);
-			}, 500);
-		}
+		jenkins.queue.item(id, function (err, item) {
+			if (err) throw err;
+			if (item.executable) {
+				console.log('number:', item.executable.number);
+				logstream();
+
+			} else if (item.cancelled) {
+				console.log('cancelled');
+			} else {
+				setTimeout(function () {
+					waitOnQueue(id);
+				}, 500);
+			}
 		});
 	}
 
 
 	function logstream() {
 		var log = jenkins.build.logStream(jobName, 'lastBuild');
-		log.on('data', function(text) {
+		log.on('data', function (text) {
 			process.stdout.write(text);
 		});
- 
-		log.on('error', function(err) {
+
+		log.on('error', function (err) {
 			console.log('error', err);
 		});
- 
-		log.on('end', function() {
+
+		log.on('end', function () {
 			console.log('end');
 		});
 	}
