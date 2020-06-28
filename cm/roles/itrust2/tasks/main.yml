@@ -1,0 +1,12 @@
+---
+
+- name: Install mysql 5.7
+  become: yes
+  apt:
+    name: [mysql-server, python3-pymysql]
+    state: present
+    update_cache: yes
+
+- name: Ensure mysql running
+  become: yes
+  systemd: name=mysql state=started
