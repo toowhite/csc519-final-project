@@ -31,19 +31,17 @@ exports.builder = yargs => {
 
 
 exports.handler = async argv => {
-    const { privateKey } = argv;
+    const { privateKey, ghuser, ghpass } = argv;
 
     (async () => {
 
-        await run( privateKey );
+        await run( privateKey, ghuser, ghpass );
 
     })();
 
 };
 
 async function run(privateKey, ghuser, ghpass) {
-	process.env['GHUSER'] = ghuser;
-	process.env['GHPASS'] = ghpass;
     console.log(chalk.greenBright('Installing jenkins server!'));
 
     console.log(chalk.blueBright('Provisioning jenkins server...'));
@@ -61,7 +59,7 @@ async function run(privateKey, ghuser, ghpass) {
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright('Running init script...'));
-    result = sshSync('/bakerx/cm/server-init.sh', 'vagrant@192.168.33.20');
+    result = sshSync(`/bakerx/cm/server-init.sh ${ghuser} ${ghpass}`, 'vagrant@192.168.33.20');
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright("Setup completes. Open jenkins at http://192.168.33.20:9000"));
