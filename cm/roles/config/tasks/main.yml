@@ -23,30 +23,7 @@
     replace: 'HTTP_PORT=9000'
   become: yes
 
-- name: restart jenkins
-  systemd:
-    state: restarted
-    name: jenkins
-  become: yes
-
-- name: Wait for Jenkins to start up
-  uri:
-    url: http://192.168.33.20:9000
-    status_code: 200
-    user: admin
-    password: "{{ admin_password }}"
-    timeout: 5
-    force_basic_auth: yes
-  register: jenkins_service_status
-  retries: 10
-  delay: 5
-  until: >
-    'status' in jenkins_service_status and
-    jenkins_service_status['status'] == 200
-
-- name: Check Jenkins status
-  debug:
-    msg: "Jenkins status: {{ jenkins_service_status['status'] }}"
+- include: reload-jenkins.yml
 
 - name: Install plugin
   jenkins_plugin:
@@ -64,8 +41,7 @@
     - nodejs
     - git
 
-- name: restart jenkins
-  systemd:
-    state: restarted
-    name: jenkins
-  become: yes
+- include: reload-jenkins.yml
+
+- name: Update pipelines
+  shell: /bakerx/cm/update-pipelines.sh

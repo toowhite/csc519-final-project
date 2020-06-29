@@ -10,14 +10,14 @@
 - name: Install dependencies (apt)
   become: yes
   apt:
-    name: [python-pip, mongodb-org, nodejs, npm]
+    name: [mongodb-org]
     state: present
     update_cache: yes
 
 - name: Install dependencies (pip)
   become: yes
   pip:
-    name: [pymongo, jenkins-job-builder]
+    name: [pymongo]
 
 - name: Ensure mongodb running
   become: yes
@@ -31,8 +31,6 @@
     database: admin
     name: "{{ mongodb_admin_user }}"
     password: "{{ mongodb_admin_password }}"
-    # login_user: "{{ mongodb_admin_user }}"
-    # login_password: "{{ mongodb_admin_password }}"
     state: present
     roles: root
 
@@ -71,8 +69,4 @@
 - name: Source the /etc/environment file
   shell: . /etc/environment
 
-- name: restart jenkins (to ensure read latest envs)
-  systemd:
-    state: restarted
-    name: jenkins
-  become: yes
+- include: ../config/tasks/reload-jenkins.yml
