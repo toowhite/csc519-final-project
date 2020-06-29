@@ -43,7 +43,7 @@ async function run(privateKey, ghuser, ghpass) {
     console.log(chalk.greenBright('Installing jenkins server!'));
 
     console.log(chalk.blueBright('Provisioning jenkins server...'));
-    let result = child.spawnSync(`bakerx`, `run config-srv bionic --ip 192.168.33.20 --sync`.split(' '), {shell:true, stdio: 'inherit'} );
+    let result = child.spawnSync(`bakerx`, `run config-srv bionic --ip 192.168.33.20 --sync -m 4096`.split(' '), {shell:true, stdio: 'inherit'} );
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright('Installing privateKey on jenkins server'));
