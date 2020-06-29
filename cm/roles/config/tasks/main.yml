@@ -44,4 +44,13 @@
 - include: reload-jenkins.yml
 
 - name: Update pipelines
-  shell: /bakerx/cm/update-pipelines.sh
+  shell: "/bakerx/cm/update-pipelines.sh"
+
+- name: Save github credential
+  shell: "/bakerx/cm/post-credential.sh github {{ GH_USER }} {{ GH_PASS }}"
+
+- name: Save mysql credential
+  shell: "/bakerx/cm/post-credential.sh mysql root {{ mysql_root_password }}"
+
+- name: Save smtp credential
+  shell: "/bakerx/cm/post-credential.sh smtp {{ smtp_username }} {{smtp_password }}"

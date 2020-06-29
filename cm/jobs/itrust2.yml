@@ -4,27 +4,32 @@
       auth-token: token
       dsl: |
           node {
-            stage('Source') {
-                git credentialsId: 'identification', url: 'https://github.ncsu.edu/engr-csc326-staff/iTrust2-v6.git'
-                dir('iTrust2/src/main/java') {
-                    sh 'cp db.properties.template db.properties'
-                    sh 'sed -i "s/^password.*$/password 8s5yMN1VP3/" db.properties'
-                    
-                    sh 'cp email.properties.template email.properties'
-                    sh 'sed -i "s/^from.*$/from csc519-1d02a0@inbox.mailtrap.io/" email.properties'
-                    sh 'sed -i "s/^username.*$/username c1b5025c5db0ef/" email.properties'
-                    sh 'sed -i "s/^password.*$/password 0d024370fa6a86/" email.properties'
-                    sh 'sed -i "s/^host.*$/host smtp.mailtrap.io/" email.properties'
-                }
-            } 
-            stage('Build') {
-                dir('iTrust2')  {
-                    sh 'mvn clean process-test-classes -f pom-data.xml'
-                }
-            }
-            stage('Test') {
-                dir('iTrust2') {
-                    sh 'mvn clean test verify org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle'
-                }
-            }
+          stage('Source') {
+              git credentialsId: 'github', url: 'https://github.ncsu.edu/engr-csc326-staff/iTrust2-v6.git'
+              dir('iTrust2/src/main/java') {
+                  sh 'cp db.properties.template db.properties'
+                  withCredentials([usernamePassword(credentialsId: 'mysql', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                      sh 'sed -i "s/^password.*\$/password $PASSWORD/" db.properties'
+                  }
+                  
+                  sh 'cp email.properties.template email.properties'
+                  withCredentials([usernamePassword(credentialsId: 'smtp', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                      sh 'sed -i "s/^from.*\$/from csc519-1d02a0@inbox.mailtrap.io/" email.properties'
+                      sh 'sed -i "s/^username.*\$/username $USERNAME/" email.properties'
+                      sh 'sed -i "s/^password.*\$/password $PASSWORD/" email.properties'
+                      sh 'sed -i "s/^host.*\$/host smtp.mailtrap.io/" email.properties'
+                  }
+
+              }
+          } 
+          stage('Build') {
+              dir('iTrust2')  {
+                  sh 'mvn clean process-test-classes -f pom-data.xml'
+              }
+          }
+          stage('Test') {
+              dir('iTrust2') {
+                  sh 'mvn clean test verify org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle'
+              }
+          }
           }
