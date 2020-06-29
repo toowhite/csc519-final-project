@@ -60,6 +60,10 @@ async function run(privateKey, ghuser, ghpass) {
     result = sshSync(`/bakerx/cm/server-init.sh ${ghuser} ${ghpass}`, 'vagrant@192.168.33.20');
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
+    console.log(chalk.blueBright('Update pipelines...'))
+	result = sshSync(`/bakerx/cm/run-jenkins-job.sh`, 'vagrant@192.168.33.20');
+    if (result.error) { console.log(result.error); process.exit( result.status ); }
+    
     console.log(chalk.blueBright("Setup completes. Open jenkins at http://192.168.33.20:9000"));
 
 }

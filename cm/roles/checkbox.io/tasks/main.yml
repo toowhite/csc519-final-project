@@ -55,7 +55,7 @@
     state: present
     regexp: "^{{ item.key }}="
     line: "{{ item.key }}={{ item.value}}"
-  no_log: false
+  no_log: true
   with_items:
     - key: APP_PORT 
       value: 3002
