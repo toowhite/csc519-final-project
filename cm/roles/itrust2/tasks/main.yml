@@ -3,7 +3,7 @@
 - name: Install dependencies (apt)
   become: yes
   apt:
-    name: [mysql-server, jq, maven]
+    name: [mysql-server, maven]
     state: present
     update_cache: yes
 

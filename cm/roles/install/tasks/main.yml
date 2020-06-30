@@ -2,7 +2,7 @@
 
 - name: install dependencies (apt)
   apt:
-    name: [python-pip, nodejs, npm, openjdk-8-jdk]
+    name: [python-pip, nodejs, npm, openjdk-8-jdk, jq]
     update_cache: yes
   become: yes
 
