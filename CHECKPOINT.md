@@ -1,7 +1,9 @@
 # Checkpoint (7/1/2020)
 
 ## Andrew Miller
-
+- write node.js script using npm esprima to analyze all files in specified directory for message chains, nested if statements, and function line count (100%)
+- integrate analysis step in pipeline, failing the build if metric detected (100%)
+- set up jenkins api token programmatically from outside the pipeline yaml file (50%)
 
 ## Zhuowei Li
 - Fixed issues mentioned by TA in M1 feedback (100%)
