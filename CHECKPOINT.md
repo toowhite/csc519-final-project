@@ -9,7 +9,7 @@
 - Study test suite analysis (50%)
 
 ## Qingyan Wang
-- Revise pipeline setup, and send the github parameters as arguments in bash script.
+- Revise pipeline setup, and send the github parameters as arguments in bash script. (100%)
 - Get Crumb, Jenkins user API token, and create new credential using curl command. (100%)
 - Study fuzz testing and test suite analysis (50%)
 
