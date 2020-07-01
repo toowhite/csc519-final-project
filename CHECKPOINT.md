@@ -9,7 +9,8 @@
 - Study test suite analysis (50%)
 
 ## Qingyan Wang
-
+- Get Crumb, Jenkins user API token, and create new credential using curl command. (100%)
+- Study fuzz testing and test suite analysis (50%)
 
 
 # Checkpoint (6/17/2020)
