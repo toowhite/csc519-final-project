@@ -1,3 +1,17 @@
+# Checkpoint (7/1/2020)
+
+## Andrew Miller
+
+
+## Zhuowei Li
+- Fixed issues mentioned by TA in M1 feedback (100%)
+- Setup build environment and command for iTrust (100%)
+- Study test suite analysis (50%)
+
+## Qingyan Wang
+
+
+
 # Checkpoint (6/17/2020)
 
 ## Andrew Miller
