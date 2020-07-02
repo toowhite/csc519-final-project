@@ -46,6 +46,26 @@
 - name: Update pipelines
   shell: "/bakerx/cm/update-pipelines.sh"
 
+- name: Wait until the file pipeline config files are present before continuing
+  wait_for:
+    path: "{{ item }}"
+  with_items:
+    - /var/lib/jenkins/jobs/checkbox.io/config.xml
+    - /var/lib/jenkins/jobs/iTrust/config.xml
+
+- name: Set token for checkbox.io and Itrust pipeline jobs
+  replace:
+    path: "{{ item }}"
+    regexp: '<keepDependencies>false<\/keepDependencies>\s+<properties>'
+    replace: "<keepDependencies>false</keepDependencies>\n  <authToken>{{jenkins_token}}</authToken>\n  <properties>"
+  with_items:
+    - /var/lib/jenkins/jobs/checkbox.io/config.xml
+    - /var/lib/jenkins/jobs/iTrust/config.xml
+  become: yes
+
+- name: Update pipelines
+  shell: "/bakerx/cm/update-pipelines.sh"
+
 - name: Save github credential
   shell: "/bakerx/cm/post-credential.sh github {{ GH_USER }} {{ GH_PASS }}"
 

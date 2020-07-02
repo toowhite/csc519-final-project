@@ -1,12 +1,16 @@
 - job:
     name: checkbox.io
     project-type: pipeline
-    auth-token: token
     dsl: |
         node {
             stage('Source') {
                 git 'https://github.com/chrisparnin/checkbox.io.git'
-            } 
+            }
+            stage('Analysis') {
+                dir("server-side") {
+                    sh 'node /bakerx/analysis.js $(pwd)'
+                }
+            }
             stage('Build') {
                 dir("server-side/site") {
                     sh 'pwd'
