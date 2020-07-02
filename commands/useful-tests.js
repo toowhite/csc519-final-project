@@ -33,6 +33,6 @@ exports.handler = async argv => {
 
 async function run(no_of_mutations) {
     console.log(chalk.greenBright(`Run ${no_of_mutations} times (mutations)...`));
-    let result = sshSync(`/bakerx/cm/call-detector.sh`, 'vagrant@192.168.33.20');
+    let result = sshSync(`/bakerx/cm/call-detector.sh ${no_of_mutations}`, 'vagrant@192.168.33.20');
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 }
