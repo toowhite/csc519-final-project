@@ -1,22 +1,24 @@
-let fs = require('fs');
-let xml2js = require('xml2js');
-let child = require('child_process');
-let parser = new xml2js.Parser();
-let Bluebird = require('bluebird');
+const fs = require('fs');
+const xml2js = require('xml2js');
+const child = require('child_process');
+const parser = new xml2js.Parser();
+const Bluebird = require('bluebird');
 const Random = require('random-js');
 const path = require("path");
 
-function mutate() {
+async function mutate() {
     let files = getAllFiles(projectFolder);
+    let mutationPromises = [];
     for (let i in files) {
         if (files.hasOwnProperty(i) && new Random.Random().bool(0.1)) {
-            console.log(`mutating file: ${files[i]}`)
-            mutateFile(files[i])
+            console.log(`mutating file: ${files[i]}`);
+            mutationPromises.push(mutateFile(files[i]));
         }
     }
+    return Promise.all(mutationPromises);
 }
 
-function mutateFile(filePath) {
+async function mutateFile(filePath) {
     let lineReader = require('readline').createInterface({
         input: require('fs').createReadStream(filePath)
     });
@@ -42,8 +44,11 @@ function mutateFile(filePath) {
         buf += `${line}\n`;
     });
 
-    lineReader.on('close', function (line) {
-        fs.writeFileSync(filePath, buf)
+    return new Promise((resolve) => {
+        lineReader.on('close', function (line) {
+            fs.writeFileSync(filePath, buf);
+            resolve(filePath);
+        });
     });
 }
 
@@ -176,7 +181,7 @@ const noOfMutations = process.argv[2];
     source();
     for (let i = 0; i < noOfMutations; i++) {
         config();
-        mutate();
+        await mutate();
         rebuild();
         await gatherResults();
         reset();
