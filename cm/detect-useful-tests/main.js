@@ -35,7 +35,9 @@ function mutateFile(filePath) {
                 line = line.replace(/==/g, "!=");
             else line = line.replace(/!=/g, "==");
             line = line.replace(/0/, "1");
-            // line = line.replace(/return.+;/, "return null;");
+            if (/return\s+true;/.test(line))
+                line = line.replace(/return\s+true;/, "return false;");
+            else line = line.replace(/return\s+false;/, "return true;");
         }
         buf += `${line}\n`;
     });
@@ -103,8 +105,7 @@ function _build() {
     let result = child.spawnSync(buildCommands.join(" && "), {stdio: "pipe", shell: true});
     if (result.status == 0) {
         console.info("Build successfully.");
-    }
-    else {
+    } else {
         console.error(result.error);
     }
     fs.writeFileSync("build_stdout.log", result.stdout, {flag: "w"});
@@ -120,36 +121,32 @@ function test() {
     let result = child.spawnSync(testCommands.join(" && "), {stdio: "pipe", shell: true});
     if (result.status == 0) {
         console.info("Test successfully.");
-    }
-    else {
+    } else {
         console.error(result.error);
     }
     fs.writeFileSync("test_stdout.log", result.stdout, {flag: "w"});
     fs.writeFileSync("test_stderr.log", result.stderr, {flag: "w"});
 }
 
-function readResults(result)
-{
+function readResults(result) {
     let tests = [];
-    for( let i = 0; i < result.testsuite['$'].tests; i++ )
-    {
+    for (let i = 0; i < result.testsuite['$'].tests; i++) {
         let testcase = result.testsuite.testcase[i];
-        
+
         tests.push({
-        name:   testcase['$'].name, 
-        time:   testcase['$'].time, 
-        status: testcase.hasOwnProperty('failure') ? "failed": "passed"
+            name: testcase['$'].name,
+            time: testcase['$'].time,
+            status: testcase.hasOwnProperty('failure') ? "failed" : "passed"
         });
-    }    
+    }
     return tests;
 }
 
-async function calculatePriority(testReport)
-{
+async function calculatePriority(testReport) {
     let contents = fs.readFileSync(testReport)
     let xml2json = await Bluebird.fromCallback(cb => parser.parseString(contents, cb));
     let tests = readResults(xml2json);
-    tests.forEach( e => console.log(e));
+    tests.forEach(e => console.log(e));
 
     return tests;
 }
@@ -165,7 +162,7 @@ function reset() {
 
 async function gatherResults() {
     let testFolder = projectFolder + "/target/surefire-reports";
-    let testReport =  testFolder + "/TEST-edu.ncsu.csc.itrust2.apitest.APIAppointmentRequestTest.xml";
+    let testReport = testFolder + "/TEST-edu.ncsu.csc.itrust2.apitest.APIAppointmentRequestTest.xml";
     await calculatePriority(testReport);
 }
 
@@ -186,7 +183,6 @@ const noOfMutations = process.argv[2];
     }
     console.log("Mission completes.");
 })();
-
 
 
 module.exports.calculatePriority = calculatePriority;
