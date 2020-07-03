@@ -1,8 +1,8 @@
-let fs = require('fs'),
+const fs = require('fs'),
     xml2js = require('xml2js'),
     child  = require('child_process'); 
-let parser = new xml2js.Parser();
-let Bluebird = require('bluebird');
+const parser = new xml2js.Parser();
+const Bluebird = require('bluebird');
 
 function mutate() {
     // TODO
@@ -39,19 +39,37 @@ function config() {
 }
 
 function _build() {
+    console.debug("Start building...");
     let buildCommands = [
         `cd ${projectFolder}`,
-        "mvn clean process-test-classes -f pom-data.xml"
+        "mvn clean process-test-classes -f pom-data.xml",
     ];
-    child.spawnSync(buildCommands.join(" && "), {stdio: "inherit", shell: true});
+    let result = child.spawnSync(buildCommands.join(" && "), {stdio: "pipe", shell: true});
+    if (result.status == 0) {
+        console.info("Build successfully.");
+    }
+    else {
+        console.error(result.error);
+    }
+    fs.writeFileSync("build_stdout.log", result.stdout, {flag: "w"});
+    fs.writeFileSync("build_stderr.log", result.stderr, {flag: "w"});
 }
 
 function test() {
+    console.debug("Start testing...");
     let testCommands = [
         `cd ${projectFolder}`,
         "mvn clean test verify org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle"
     ];
-    child.spawnSync(testCommands.join(" && "), {stdio: "inherit", shell: true});
+    let result = child.spawnSync(testCommands.join(" && "), {stdio: "pipe", shell: true});
+    if (result.status == 0) {
+        console.info("Test successfully.");
+    }
+    else {
+        console.error(result.error);
+    }
+    fs.writeFileSync("test_stdout.log", result.stdout, {flag: "w"});
+    fs.writeFileSync("test_stderr.log", result.stderr, {flag: "w"});
 }
 
 function readResults(result)
@@ -89,25 +107,31 @@ function reset() {
     child.spawnSync(commands.join(" && "), {stdio: "inherit", shell: true});
 }
 
-function gatherResults() {
+async function gatherResults() {
     let testFolder = projectFolder + "/target/surefire-reports";
     let testReport =  testFolder + "/TEST-edu.ncsu.csc.itrust2.apitest.APIAppointmentRequestTest.xml";
-    calculatePriority(testReport);
+    await calculatePriority(testReport);
 }
 
-let projectFolder = `${process.env.HOME}/iTrust2-v6/iTrust2`;
+const projectFolder = `${process.env.HOME}/iTrust2-v6/iTrust2`;
 if (process.argv.length < 3) {
     throw new Error("Insufficient arguments");
 }
-let noOfMutations = process.argv[2];
-source();
-for (var i = 0; i < noOfMutations; i++) {
-    config();
-    mutate();
-    rebuild();
-    gatherResults();
-    reset();
-}
+const noOfMutations = process.argv[2];
+
+
+(async () => {
+    source();
+    for (let i = 0; i < noOfMutations; i++) {
+        config();
+        mutate();
+        rebuild();
+        await gatherResults();
+        reset();
+    }
+    console.log("Mission completes.");
+})();
+
 
 
 // module.exports.calculatePriority = calculatePriority;
