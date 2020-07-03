@@ -1,11 +1,67 @@
-const fs = require('fs'),
-    xml2js = require('xml2js'),
-    child  = require('child_process'); 
-const parser = new xml2js.Parser();
-const Bluebird = require('bluebird');
+let fs = require('fs');
+let xml2js = require('xml2js');
+let child = require('child_process');
+let parser = new xml2js.Parser();
+let Bluebird = require('bluebird');
+const Random = require('random-js');
+const path = require("path");
 
 function mutate() {
-    // TODO
+    let files = getAllFiles(projectFolder);
+    for (let i in files) {
+        if (files.hasOwnProperty(i) && new Random.Random().bool(0.1)) {
+            console.log(`mutating file: ${files[i]}`)
+            mutateFile(files[i])
+        }
+    }
+}
+
+function mutateFile(filePath) {
+    let lineReader = require('readline').createInterface({
+        input: require('fs').createReadStream(filePath)
+    });
+
+    let buf = "";
+
+    lineReader.on('line', function (line) {
+        if (new Random.Random().bool(0.1)) {
+            line = line.replace(/"\S+"/g, "\"cool\"");
+            if (/if\s*\(/.test(line)) {
+                if (line.includes(">")) {
+                    line = line.replace(/>/g, "<");
+                } else line = line.replace(/</g, ">");
+            }
+            if (line.includes("=="))
+                line = line.replace(/==/g, "!=");
+            else line = line.replace(/!=/g, "==");
+            line = line.replace(/0/, "1");
+            line = line.replace(/return.+;/, "return null;");
+        }
+        buf += `${line}\n`;
+    });
+
+    lineReader.on('close', function (line) {
+        fs.writeFileSync(filePath, buf)
+    });
+}
+
+function getAllFiles(parentDirectory) {
+    let files = []
+    const hmm = function (currentDirectory) {
+        let currentFiles = fs.readdirSync(currentDirectory)
+        currentFiles.forEach(function (file) {
+            if (fs.statSync(currentDirectory + "/" + file).isDirectory()) {
+                if (!currentDirectory.includes("/src/test/"))
+                    files.concat(hmm(currentDirectory + "/" + file))
+            } else {
+                if (file.endsWith('.java')) {
+                    files.push(path.join(currentDirectory, "/", file))
+                }
+            }
+        })
+    }
+    hmm(parentDirectory)
+    return files;
 }
 
 function rebuild() {
