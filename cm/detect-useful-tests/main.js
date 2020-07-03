@@ -175,8 +175,6 @@ if (process.argv.length < 3) {
 }
 const noOfMutations = process.argv[2];
 
-mutate();
-
 (async () => {
     source();
     for (let i = 0; i < noOfMutations; i++) {
