@@ -35,7 +35,7 @@ function mutateFile(filePath) {
                 line = line.replace(/==/g, "!=");
             else line = line.replace(/!=/g, "==");
             line = line.replace(/0/, "1");
-            line = line.replace(/return.+;/, "return null;");
+            // line = line.replace(/return.+;/, "return null;");
         }
         buf += `${line}\n`;
     });
@@ -170,23 +170,24 @@ async function gatherResults() {
 }
 
 const projectFolder = `${process.env.HOME}/iTrust2-v6/iTrust2`;
-if (process.argv.length < 3) {
-    throw new Error("Insufficient arguments");
-}
-const noOfMutations = process.argv[2];
+// if (process.argv.length < 3) {
+//     throw new Error("Insufficient arguments");
+// }
+// const noOfMutations = process.argv[2];
 
+mutate();
 
-(async () => {
-    source();
-    for (let i = 0; i < noOfMutations; i++) {
-        config();
-        mutate();
-        rebuild();
-        await gatherResults();
-        reset();
-    }
-    console.log("Mission completes.");
-})();
+// (async () => {
+//     source();
+//     for (let i = 0; i < noOfMutations; i++) {
+//         config();
+//         mutate();
+//         rebuild();
+//         await gatherResults();
+//         reset();
+//     }
+//     console.log("Mission completes.");
+// })();
 
 
 
