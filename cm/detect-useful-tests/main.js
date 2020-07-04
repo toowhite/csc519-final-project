@@ -7,11 +7,6 @@ const Random = require('random-js');
 const path = require("path");
 const FileHound = require('filehound');
 
-let testMap = new Map();
-let initMap = 0;
-let testCount = 0;
-let testStatus = "";
-
 async function mutate() {
     let files = getAllFiles(projectFolder);
     let mutationPromises = [];
@@ -143,15 +138,14 @@ function readResults(result) {
     let tests = [];
     for (let i = 0; i < result.testsuite['$'].tests; i++) {
         let testcase = result.testsuite.testcase[i];
-		
-		if (initMap == 0) {
-			testMap.set((testcase['$'].classname).concat(testcase['$'].name), 0)
+        
+        let key = (testcase['$'].classname).concat(testcase['$'].name);
+		if (!testMap.has(key)) {
+			testMap.set(key, 0);
 		}
-		testStatus = testcase.hasOwnProperty('failure') ? "failed": "passed"
-		if (testStatus.localeCompare("failed") == 0) {
-			testCount = testMap.get((testcase['$'].classname).concat(testcase['$'].name));
-			testCount = testCount + 1;
-			testMap.set((testcase['$'].classname).concat(testcase['$'].name), testCount)
+		let testStatus = testcase.hasOwnProperty('failure') ? "failed": "passed"
+		if (testStatus == "failed") {
+			testMap.set(key, testMap.get(key) + 1);
 		}
     }
     return tests;
@@ -186,12 +180,11 @@ if (process.argv.length < 3) {
 }
 const noOfMutations = process.argv[2];
 
+let testMap = new Map();
+
 (async () => {
     source();
     for (let i = 0; i < noOfMutations; i++) {
-		if (i == 1) {
-			initMap = 1;
-		}
         config();
         await mutate();
         rebuild();
@@ -202,12 +195,7 @@ const noOfMutations = process.argv[2];
 		yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
 	}
 	
-	var numberOfExecutes = process.argv.slice(2)
 	for (let [key, value] of testMap) {
-		console.log(value + '/' + numberOfExecutes + " " + key)
+		console.log(value + '/' + noOfMutations + " " + key);
 	}
-    console.log("Mission completes.");
 })();
-
-
-module.exports.calculatePriority = calculatePriority;
