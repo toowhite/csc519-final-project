@@ -60,21 +60,16 @@ function getAllFiles(parentDirectory) {
         currentFiles.forEach(function (file) {
             if (fs.statSync(currentDirectory + "/" + file).isDirectory()) {
                 if (!currentDirectory.includes("/src/test/"))
-                    files.concat(hmm(currentDirectory + "/" + file))
+                    files.concat(hmm(currentDirectory + "/" + file));
             } else {
                 if (file.endsWith('.java')) {
-                    files.push(path.join(currentDirectory, "/", file))
+                    files.push(path.join(currentDirectory, "/", file));
                 }
             }
         })
     }
-    hmm(parentDirectory)
+    hmm(parentDirectory);
     return files;
-}
-
-function rebuild() {
-    _build();
-    test();
 }
 
 function source() {
@@ -102,20 +97,22 @@ function config() {
     child.spawnSync(modifyPropertyFilesCommands.join(" && "), {stdio: "inherit", shell: true});
 }
 
-function _build() {
-    console.debug("Start building...");
-    let buildCommands = [
+function compile() {
+    console.debug("Start compiling...");
+    let commands = [
         `cd ${projectFolder}`,
         "mvn clean process-test-classes -f pom-data.xml",
     ];
-    let result = child.spawnSync(buildCommands.join(" && "), {stdio: "pipe", shell: true});
+    let result = child.spawnSync(commands.join(" && "), {stdio: "pipe", shell: true});
+    fs.writeFileSync("compile_stdout.log", result.stdout, {flag: "w"});
+    fs.writeFileSync("compile_stderr.log", result.stderr, {flag: "w"});
     if (result.status == 0) {
-        console.info("Build successfully.");
+        console.info("Compile successfully.");
+        return true;
     } else {
-        console.error(result.error);
+        console.error("Compile failed. Discard current mutation.");
+        return false;
     }
-    fs.writeFileSync("build_stdout.log", result.stdout, {flag: "w"});
-    fs.writeFileSync("build_stderr.log", result.stderr, {flag: "w"});
 }
 
 function test() {
@@ -125,13 +122,15 @@ function test() {
         "mvn clean test verify org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle"
     ];
     let result = child.spawnSync(testCommands.join(" && "), {stdio: "pipe", shell: true});
-    if (result.status == 0) {
-        console.info("Test successfully.");
-    } else {
-        console.error(result.error);
-    }
     fs.writeFileSync("test_stdout.log", result.stdout, {flag: "w"});
     fs.writeFileSync("test_stderr.log", result.stderr, {flag: "w"});
+    if (result.status == 0) {
+        console.info("Test successfully.");
+        return true;
+    } else {
+        console.error("Test completes. Some tests failed.");
+        return false;
+    }
 }
 
 function readResults(result) {
@@ -160,12 +159,16 @@ async function calculatePriority(testReport) {
 }
 
 function reset() {
+    // console.log(`rm ${__dirname}/*.log`);
     let commands = [
         `cd ${projectFolder}/..`,
-        "git reset --hard"
+        "git reset --hard",
+        'pkill -f "mvn clean"',
+        'mysql --user="root" --password="$mysql_root_password" --database="iTrust2" --execute="DROP DATABASE iTrust2;"',
+        " "
     ];
 
-    child.spawnSync(commands.join(" && "), {stdio: "inherit", shell: true});
+    child.spawnSync(commands.join(" ; "), {stdio: "inherit", shell: true});
 }
 
 async function gatherResults() {
@@ -180,17 +183,27 @@ if (process.argv.length < 3) {
 }
 const noOfMutations = process.argv[2];
 
+// Saving results
 let testMap = new Map();
 
 (async () => {
     source();
-    for (let i = 0; i < noOfMutations; i++) {
+    let i = 0;
+    while (i < noOfMutations) {
+        reset();
         config();
         await mutate();
-        rebuild();
+        
+        let r = compile();
+        // If the code does not compile, try mutating again. 
+        if (!r) continue;
+
+        test();
         await gatherResults();
-        reset();
+        i += 1;
     }
+    
+    // TODO: more readable code
     testMap[Symbol.iterator] = function* () {
 		yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
 	}
