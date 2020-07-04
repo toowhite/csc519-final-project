@@ -103,7 +103,7 @@ function compile() {
         `cd ${projectFolder}`,
         "mvn clean process-test-classes -f pom-data.xml",
     ];
-    let result = child.spawnSync(commands.join(" && "), {stdio: "pipe", shell: true});
+    let result = child.spawnSync(commands.join(" && "), {stdio: "inherit", shell: true});
     fs.writeFileSync("compile_stdout.log", result.stdout, {flag: "w"});
     fs.writeFileSync("compile_stderr.log", result.stderr, {flag: "w"});
     if (result.status == 0) {
@@ -124,13 +124,7 @@ function test() {
     let result = child.spawnSync(testCommands.join(" && "), {stdio: "pipe", shell: true});
     fs.writeFileSync("test_stdout.log", result.stdout, {flag: "w"});
     fs.writeFileSync("test_stderr.log", result.stderr, {flag: "w"});
-    if (result.status == 0) {
-        console.info("Test successfully.");
-        return true;
-    } else {
-        console.error("Test completes. Some tests failed.");
-        return false;
-    }
+    console.log("Tests complete.");
 }
 
 function readResults(result) {
@@ -190,6 +184,7 @@ let testMap = new Map();
     source();
     let i = 0;
     while (i < noOfMutations) {
+        console.log(`Starting the ${i+1}th mutation...\n`)
         reset();
         config();
         await mutate();
@@ -201,6 +196,7 @@ let testMap = new Map();
         test();
         await gatherResults();
         i += 1;
+        console.log("------------------------------------------------\n\n");
     }
     
     // TODO: more readable code
