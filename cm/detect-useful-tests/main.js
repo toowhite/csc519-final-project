@@ -179,9 +179,9 @@ function reset() {
     let commands = [
         `cd ${projectFolder}/..`,
         "git reset --hard",
-        'pkill -f "mvn clean"',
-        'mysql --user="root" --password="$mysql_root_password" --database="iTrust2" --execute="DROP DATABASE iTrust2;"',
-        " "
+        // 'pkill -f "mvn clean"',
+        // 'mysql --user="root" --password="$mysql_root_password" --database="iTrust2" --execute="DROP DATABASE iTrust2;"',
+        // " "
     ];
 
     child.spawnSync(commands.join(" ; "), {stdio: "inherit", shell: true});
