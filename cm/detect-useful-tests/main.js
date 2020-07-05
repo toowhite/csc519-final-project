@@ -27,7 +27,29 @@ async function mutateFile(filePath) {
     let buf = "";
 
     lineReader.on('line', function (line) {
-        if (new Random.Random().bool(0.1)) {
+        if (!line.startsWith("import") &&
+            !line.includes("@JoinColumn") &&
+            !line.includes("@Table") &&
+            !line.includes("@GeneratedValue") &&
+            !line.includes("@JoinColumn") &&
+            !line.includes("@Convert") &&
+            !line.includes("@JsonAdapter") &&
+            !line.includes("@Enumerated") &&
+            !line.includes("@Transactional") &&
+            !line.includes("@Inheritance") &&
+            !line.includes("@Fetch") &&
+            !line.includes("@Min") &&
+            !line.includes("@Max") &&
+            !line.includes("@Pattern") &&
+            !line.includes("@Length") &&
+            !line.includes("@Entity") &&
+            !line.includes("@ElementCollection") &&
+            !line.includes("@ManyToOne") &&
+            !line.includes("@OneToMany") &&
+            !line.includes("@ComponentScan") &&
+            !line.includes("@SuppressWarnings") &&
+            new Random.Random().bool(0.1)
+        ) {
             line = line.replace(/"\S+"/g, "\"cool\"");
             if (/if\s*\(/.test(line)) {
                 if (line.includes(">")) {
@@ -131,7 +153,7 @@ function readResults(result) {
     let tests = [];
     for (let i = 0; i < result.testsuite['$'].tests; i++) {
         let testcase = result.testsuite.testcase[i];
-        
+
         let key = (testcase['$'].classname).concat(testcase['$'].name);
 		if (!testMap.has(key)) {
 			testMap.set(key, 0);
@@ -188,9 +210,9 @@ let testMap = new Map();
         reset();
         config();
         await mutate();
-        
+
         let r = compile();
-        // If the code does not compile, try mutating again. 
+        // If the code does not compile, try mutating again.
         if (!r) continue;
 
         test();
@@ -198,12 +220,12 @@ let testMap = new Map();
         i += 1;
         console.log("------------------------------------------------\n\n");
     }
-    
+
     // TODO: more readable code
     testMap[Symbol.iterator] = function* () {
 		yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
 	}
-	
+
 	for (let [key, value] of testMap) {
 		console.log(value + '/' + noOfMutations + " " + key);
 	}
