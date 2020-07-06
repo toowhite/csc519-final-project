@@ -19,4 +19,6 @@ chmod +x /bakerx/cm/*.sh
 
 
 PASSFILE=/home/vagrant/.vault-pass
+set +x
 ansible-playbook /bakerx/cm/setup.yml --vault-password-file=$PASSFILE -e GH_USER=$1 -e GH_PASS=$2
+set -x
