@@ -1,10 +1,11 @@
 # DevOps-1
-## Screencast 
+## Screencast and results
 ### Milestone 2
-
+- Results after running `pipeline useful-tests -c 100`: https://github.ncsu.edu/cscdevops-summer2020/DevOps-1/blob/master/result.txt
+- Screencast: TODO
 
 ### Milestone 1
-https://drive.google.com/file/d/1hi6hP5PlqW6-jEDKOyBDMjSNYoPcPMuY/view?usp=sharing
+- Screencast: https://drive.google.com/file/d/1hi6hP5PlqW6-jEDKOyBDMjSNYoPcPMuY/view?usp=sharing
 
 
 ## Commands
