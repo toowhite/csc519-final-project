@@ -100,7 +100,9 @@ function source() {
     let getSourceCodeCommands = [
         `cd ${process.env.HOME}`,
         'rm -rf iTrust2-v6',
-        `git clone https://${gh_user}:${gh_pass}@github.ncsu.edu/engr-csc326-staff/iTrust2-v6.git`
+        `git clone https://${gh_user}:${gh_pass}@github.ncsu.edu/engr-csc326-staff/iTrust2-v6.git`,
+        `cd ${projectFolder}`,
+        `mvn dependency:resolve`
     ];
     child.spawnSync(getSourceCodeCommands.join(" && "), {stdio: "inherit", shell: true});
 }
@@ -119,22 +121,24 @@ function config() {
     child.spawnSync(modifyPropertyFilesCommands.join(" && "), {stdio: "inherit", shell: true});
 }
 
-function compile() {
+async function compile() {
     console.debug("Start compiling...");
     let commands = [
         `cd ${projectFolder}`,
         "mvn clean process-test-classes -f pom-data.xml",
     ];
-    let result = child.spawnSync(commands.join(" && "), {stdio: "inherit", shell: true});
-    fs.writeFileSync("compile_stdout.log", result.stdout, {flag: "w"});
-    fs.writeFileSync("compile_stderr.log", result.stderr, {flag: "w"});
-    if (result.status == 0) {
-        console.info("Compile successfully.");
-        return true;
-    } else {
-        console.error("Compile failed. Discard current mutation.");
-        return false;
-    }
+
+    let process = child.spawn(commands.join(" && "), {stdio: "inherit", shell: true});
+
+    return new Promise((resolve) => {
+        process.on('exit', (code) => {
+            resolve(code == 0);
+        });
+        setTimeout(() => {
+            process.kill();
+            resolve(false);
+        }, 60 * 1000);
+    });
 }
 
 function test() {
@@ -144,8 +148,8 @@ function test() {
         "mvn clean test verify org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle"
     ];
     let result = child.spawnSync(testCommands.join(" && "), {stdio: "pipe", shell: true});
-    fs.writeFileSync("test_stdout.log", result.stdout, {flag: "w"});
-    fs.writeFileSync("test_stderr.log", result.stderr, {flag: "w"});
+    // fs.writeFileSync("test_stdout.log", result.stdout, {flag: "w"});
+    // fs.writeFileSync("test_stderr.log", result.stderr, {flag: "w"});
     console.log("Tests complete.");
 }
 
@@ -211,9 +215,11 @@ let testMap = new Map();
         config();
         await mutate();
 
-        let r = compile();
-        // If the code does not compile, try mutating again.
-        if (!r) continue;
+        let result = await compile();
+        console.log(`Compiling: ${result ? "successfully" : "failed"}`)
+        if (!result) {
+            continue;
+        }
 
         test();
         await gatherResults();
