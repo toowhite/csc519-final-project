@@ -10,30 +10,45 @@ https://drive.google.com/file/d/1hi6hP5PlqW6-jEDKOyBDMjSNYoPcPMuY/view?usp=shari
 ## Commands
 From project root directory, these commands can be executed:
 
--   npm install
+-   **npm install**
     
     Install nodejs dependencies.
 
--   npm link
+-   **npm link**
     
     Link the `pipeline` command.
   
--   pipeline setup
+-   **pipeline setup --gh-user \<username\> --gh-pass \<password\>**
     
-    Setup jenkins and build environment for checkbox.io.
+    Setup jenkins and build environment for checkbox.io. `gh-user` and `gh-pass` are your NCSU Unity ID and password, respectively.
   
--   pipeline build checkbox.io
+-   **pipeline build \<jobName\> -u \<admin\> -p \<admin\>**
     
-    Update the pipeline code and trigger a build.
+    Update the pipeline code and trigger a build. Supported jobs are `checkbox.io` and `iTrust`.
 
--   // TODO
+-   **pipeline useful-tests -c 100**
+
+    Initiate analysis of test suite for iTrust to run `-c` numbers of times.
+
 
 ## Experience (Milestone 2) 
-### Jenkins (Andrew Miller)
+### Andrew Miller
 
-### Build environment (Zhuowei Li)
+### Zhuowei Li
 
-### Pipeline (Qingyan Wang)
+- I mainly worked on setting up the build environment of iTrust, fixing issues raised by TA in M1 feedback, and test analysis. Among the tasks above, I find the test analysis part is the hardest.
+  
+- In the test analysis task, it is very chanllenging to write robust code that can correctly do the operations, like compiling the code and reverting failed ones, or reseting the current status. When testing running 100 mutations, I even encountered memory leak issues that has to be handled. 
+  
+  To write robust code, one must have very good understading of the whole build process and relevant tools/languages. For example, we write the code mainly in Node.js, but in the code Maven and Bash are embedded extensively. If you are not familar with them, it becomes very painful to automize the build process, and will create very confusing outputs that take you a lot of time to understand.
+
+- By the time of deadline, our code does work and demonstrates the core functionality, but honestly is not robust enough to handle all kinds of abnormality. It takes a lot time to develop the "testing framework" itself, and it is not an easy task. That further illustrates the usefulness of library like PIT; in industry, I will definitely try to reuse some open source like that rather than writing myself.
+
+- To write good Node.js, one must understand its idiomatic "asynchronous pattern". For programmers accustomed to the synchronous way of coding, the "async/await" pairs and Promise pattern can easily create seemingly correct code, but actually do not do what you want. One should taking time to learn the basics before do the coding. 
+
+- Bash weirdness is a real headache.
+
+### Qingyan Wang
 
 
 ## Experience (Milestone 1) 
