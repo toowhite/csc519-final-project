@@ -49,7 +49,13 @@ From project root directory, these commands can be executed:
 - Bash weirdness is a real headache.
 
 ### Qingyan Wang
+- The pipeline setup command arguments have the git authentication information, and it invokes a .sh file, in which curl command is used to create a Jenkins credential for GH authentication information. Using REST API to create/edit Jinkins's setting needs a CRUMB and a user API token, so to create the Jenkins credential, make sure CRUMB gotten from RESP API call is valid (403 error invalid CRUMB is always shown in different environment, it seems that the curl command syntax is fragile), then create user API token and credential information.
 
+- The fuzz testing is a lot of work, so we distributed into 3 task: the work flow, code mutation, and suite test analysis. Basically, the work flow is: config environment, mutation, mvn clean test verify, suite test analysis, git reset --HEAD. The test export xml files which needs to be converted to json before read. 
+
+- As a nodejs beginner, I met the asynchronous pattern when I was implementing the suite test analysis function. Need to spend time on the aync and await.
+
+- Some tests in iTrust2 has a higher chance to pass after mutating. Fuzzing is a good and practical way of testing I would say.
 
 ## Experience (Milestone 1) 
 ### Jenkins (Andrew Miller)
