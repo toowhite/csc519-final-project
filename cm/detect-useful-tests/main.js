@@ -135,7 +135,8 @@ async function compile() {
             resolve(code == 0);
         });
         setTimeout(() => {
-            process.kill();
+            child.spawnSync(`pkill -P ${process.pid}`, {stdio: "inherit", shell: true});
+            process.kill();   
             resolve(false);
         }, 60 * 1000);
     });

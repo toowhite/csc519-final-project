@@ -94,3 +94,5 @@
       value: "{{ smtp_username }}"
     - key: smtp_password
       value: "{{ smtp_password }}"
+    - key: MAVEN_OPTS
+      value: '"-Xmx1024m -XX:MaxPermSize=128m"'
