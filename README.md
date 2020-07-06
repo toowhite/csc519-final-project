@@ -1,7 +1,11 @@
 # DevOps-1
 ## Screencast 
+### Milestone 2
 
+
+### Milestone 1
 https://drive.google.com/file/d/1hi6hP5PlqW6-jEDKOyBDMjSNYoPcPMuY/view?usp=sharing
+
 
 ## Commands
 From project root directory, these commands can be executed:
@@ -22,7 +26,17 @@ From project root directory, these commands can be executed:
     
     Update the pipeline code and trigger a build.
 
-## Experience
+-   // TODO
+
+## Experience (Milestone 2) 
+### Jenkins (Andrew Miller)
+
+### Build environment (Zhuowei Li)
+
+### Pipeline (Qingyan Wang)
+
+
+## Experience (Milestone 1) 
 ### Jenkins (Andrew Miller)
 - I learned how extraordinarily tricky it can be to automate the installation of a server like Jenkins on a remote server, which typically requires a manual setup process via a setup wizard. This required a great deal of templating and editing files on the remote server after creating an environment in which to install the Jenkins server. At this point, I have a deep admiration for Ansible, which made most of the heavy lifting chores a breeze. However, Ansible was particularly brilliant in neatly facilitating some of the more nuanced tasks, such as first searching for and then applying changes to a configuration file on the remote file system.
 
