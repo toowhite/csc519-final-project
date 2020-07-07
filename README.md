@@ -34,6 +34,13 @@ From project root directory, these commands can be executed:
 
 ## Experience (Milestone 2) 
 ### Andrew Miller
+- Utilize npm esprima for analyzing an abstract syntax tree representation of a .js file. In this case, I created a static analysis script that used a pattern described in lecture for walking backwards from a particular point (e.g. if expression node) to identify patterns and measure characteristics of source code files.
+
+- Gained experience writing the portion of our script that "fuzzed" the source code of an enterprise java application for purposes of identifying useful tests. This required a relatively thorough understanding of java/jpa/hibernate, so as not to mutate lines of source code that consistently lead to build failures.
+
+- Gained more experience in ansible roles and secret management by securely placing an application token for the iTrust and checkbox.io jenkins build jobs in the appropriate configuration files.
+
+- Used a recursive helper function in node.js for exploring and collecting files in a filesystem.
 
 ### Zhuowei Li
 
