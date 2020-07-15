@@ -8,6 +8,7 @@
   "author": "YOU",
   "license": "ISC",
   "dependencies": {
+    "ansible-inventory-reader": "github:ben-bradley/ansible-inventory-reader",
     "bluebird": "^3.7.2",
     "chalk": "^4.1.0",
     "esprima": "^4.0.1",
