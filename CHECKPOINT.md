@@ -1,3 +1,16 @@
+# Checkpoint (7/15/2020)
+
+## Andrew Miller
+- //TODO
+
+## Zhuowei Li
+- Completed **pipeline prod up**
+- Working on **pipeline monitor-setup**
+- Broke down major tasks and setup Github Project Milestone 3
+
+## Qingyan Wang
+- //TODO
+
 # Checkpoint (7/1/2020)
 
 ## Andrew Miller
