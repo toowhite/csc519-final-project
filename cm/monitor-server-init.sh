@@ -14,7 +14,7 @@ sudo apt-get install ansible -y
 
 # Ensure security key has proper permissions
 chmod 700 ~/.ssh/id_rsa
-chmod +x /root/cm/*.sh
+# chmod +x /root/cm/*.sh
 
 set +x
 ansible-playbook /root/cm/monitor-setup.yml

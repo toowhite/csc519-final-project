@@ -39,11 +39,11 @@ async function run(inventoryFile) {
 function setupMonitor(config) {
     let monitorIp = config.monitor.children[0].host;
 
-    console.log(chalk.blueBright('Installing privateKey on jenkins server'));
+    console.log(chalk.blueBright('Installing privateKey on monitor server'));
     result = scpSync (identifyFile, `root@${monitorIp}:/root/.ssh/id_rsa`, identifyFile);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
-    console.log(chalk.blueBright('Copying over vault password file to jenkins server'));
+    console.log(chalk.blueBright('Copying over vault password file to monitor server'));
     let vaultPasswordFile = path.join(os.homedir(), '.ansible', '.vault-pass');
     result = scpSync (vaultPasswordFile, `root@${monitorIp}:/root/.vault-pass`, identifyFile);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
@@ -53,7 +53,7 @@ function setupMonitor(config) {
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright('Running init script...'));
-    result = sshSync(`/root/cm/monitor-server-init.sh`, `root@${monitorIp}`, identifyFile);
+    result = sshSync(`"chmod +x /root/cm/*.sh && /root/cm/monitor-server-init.sh"`, `root@${monitorIp}`, identifyFile);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 }
 
