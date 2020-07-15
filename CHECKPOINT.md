@@ -9,7 +9,9 @@
 - Broke down major tasks and setup Github Project Milestone 3
 
 ## Qingyan Wang
-- //TODO
+- Research on dynamically created inventory with this static ones
+- Research on monitor workshop
+- Research on deploy workshop
 
 # Checkpoint (7/1/2020)
 
