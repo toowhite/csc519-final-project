@@ -5,16 +5,6 @@ const { exit } = require('process');
 
 exports.command = 'prod up';
 exports.desc = 'Provision cloud instances';
-exports.builder = yargs => {
-    // yargs.options({
-	// 	force: {
-	// 		alias: 'f',
-	// 		describe: 'Delete all the old droplets',
-    //         type: 'boolean',
-    //         default: true
-	// 	},
-    // });
-};
 
 
 exports.handler = async () => {
