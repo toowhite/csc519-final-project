@@ -1,7 +1,9 @@
 # Checkpoint (7/15/2020)
 
 ## Andrew Miller
-- //TODO
+- create iTrust webapp war file in /var/lib/jenkins/workspace/iTrust/iTrust2/target/ using jenkins pipeline **100%**
+- investigate methods for deploying iTrust to digital ocean
+- investigate methods for deploying checkbox.io to digital ocean
 
 ## Zhuowei Li
 - Completed **pipeline prod up**
