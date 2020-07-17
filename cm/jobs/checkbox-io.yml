@@ -8,7 +8,7 @@
             }
             stage('Analysis') {
                 dir("server-side") {
-                    sh 'node /bakerx/analysis.js $(pwd)'
+                    sh 'node /bakerx/lib/analysis.js $(pwd)'
                 }
             }
             stage('Build') {
