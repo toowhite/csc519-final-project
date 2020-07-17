@@ -43,18 +43,21 @@ function setupMonitor(config) {
     result = scpSync (identifyFile, `root@${monitorIp}:/root/.ssh/id_rsa`, identifyFile);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
-    console.log(chalk.blueBright('Copying over vault password file to monitor server'));
-    let vaultPasswordFile = path.join(os.homedir(), '.ansible', '.vault-pass');
-    result = scpSync (vaultPasswordFile, `root@${monitorIp}:/root/.vault-pass`, identifyFile);
-    if( result.error ) { console.log(result.error); process.exit( result.status ); }
+    // console.log(chalk.blueBright('Copying over vault password file to monitor server'));
+    // let vaultPasswordFile = path.join(os.homedir(), '.ansible', '.vault-pass');
+    // result = scpSync (vaultPasswordFile, `root@${monitorIp}:/root/.vault-pass`, identifyFile);
+    // if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright('Copying init scripts...'));
     result = scpSync("./cm", `root@${monitorIp}:/root`, identifyFile, true);
+    if( result.error ) { console.log(result.error); process.exit( result.status ); }
+    result = scpSync("./monitoring_tools", `root@${monitorIp}:/root`, identifyFile, true);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright('Running init script...'));
     result = sshSync(`"chmod +x /root/cm/*.sh && /root/cm/monitor-server-init.sh"`, `root@${monitorIp}`, identifyFile);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
+
 }
 
 function setupAgents(config) {
