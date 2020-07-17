@@ -1,4 +1,29 @@
 ---
 
-- debug:
-    msg: Hello, world!
+- name: Add nodejs latest binary source
+  shell: curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+
+- name: Install dependencies
+  apt:
+    name: [nodejs, redis-server, python-apt]
+    update_cache: yes
+  become: yes
+
+- name: Install forever
+  npm:
+    name: forever
+    global: yes
+    state: present
+
+- name: Remove agent folder (in case any conflict) 
+  file:
+    path: /agent
+    state: absent
+
+- name: Copy agent
+  copy:
+    src: /bakerx/Monitoring/agent/
+    dest: /agent
+
+- name: Forever run the agent
+  shell: "cd /agent && npm install && forever stopall && forever start index.js {{ group_names[0] }}"

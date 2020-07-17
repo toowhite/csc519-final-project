@@ -1,30 +1,29 @@
 ---
 
-- name: Add nodejs source
+- name: Add nodejs latest binary source
   shell: curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 
 - name: Install dependencies
   apt:
-    name: [unzip, nodejs, redis-server]
+    name: [nodejs, redis-server]
     update_cache: yes
   become: yes
-
-- name: Create dashboard folder
-  file:
-    path: /dashboard
-    state: directory
-    mode: '0755'
-
-- name: Unzip dashboard
-  unarchive:
-    src: /root/monitoring_tools/dashboard.zip
-    dest: /dashboard
 
 - name: Install forever
   npm:
     name: forever
     global: yes
     state: present
+
+- name: Remove dashboard folder (in case any conflict) 
+  file:
+    path: /dashboard
+    state: absent
+
+- name: Copy dashboard
+  copy:
+    src: /bakerx/Monitoring/dashboard/
+    dest: /dashboard
     
 - name: Forever run the dashboard
   shell: cd /dashboard && npm install && forever stopall && forever start bin/www
