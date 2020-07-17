@@ -32,11 +32,6 @@ exports.handler = async (argv) => {
 async function run(inventoryFile) {
     
     let config = air(inventoryFile);
-    setupMonitor(config);
-    setupAgents(config);
-}
-
-function setupMonitor(config) {
     let monitorIp = config.monitor.children[0].host;
 
     console.log(chalk.blueBright('Installing privateKey on monitor server'));
@@ -48,18 +43,21 @@ function setupMonitor(config) {
     // result = scpSync (vaultPasswordFile, `root@${monitorIp}:/root/.vault-pass`, identifyFile);
     // if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
-    console.log(chalk.blueBright('Copying init scripts...'));
+    console.log(chalk.blueBright('Copying init files...'));
+    /* Copy config scripts */
     result = scpSync("./cm", `root@${monitorIp}:/root`, identifyFile, true);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
+
+    /* Copy monitoring tools */
     result = scpSync("./monitoring_tools", `root@${monitorIp}:/root`, identifyFile, true);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
+    /* Copy inventory file */
+    result = scpSync(`./${inventoryFile}`, `root@${monitorIp}:/root`, identifyFile);
+    if( result.error ) { console.log(result.error); process.exit( result.status ); }
+
     console.log(chalk.blueBright('Running init script...'));
-    result = sshSync(`"chmod +x /root/cm/*.sh && /root/cm/monitor-server-init.sh"`, `root@${monitorIp}`, identifyFile);
+    result = sshSync(`"chmod +x /root/cm/*.sh && /root/cm/monitor-server-init.sh ${inventoryFile}"`, `root@${monitorIp}`, identifyFile);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
 }
-
-function setupAgents(config) {
-    
-} 

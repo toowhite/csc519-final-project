@@ -16,6 +16,6 @@ sudo apt-get install ansible -y
 chmod 700 ~/.ssh/id_rsa
 # chmod +x /root/cm/*.sh
 
-set +x
-ansible-playbook /root/cm/monitor-setup.yml
-set -x
+INVENTORY=$1
+ansible-playbook /root/cm/monitor-setup.yml -i /root/$INVENTORY
+
