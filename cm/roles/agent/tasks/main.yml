@@ -15,15 +15,19 @@
     global: yes
     state: present
 
-- name: Remove agent folder (in case any conflict) 
-  file:
-    path: /agent
-    state: absent
+# - name: Remove agent folder (in case any conflict) 
+#   file:
+#     path: /agent
+#     state: absent
 
-- name: Copy agent
-  copy:
+- name: Synchronize agent (excluding node_modules)
+  synchronize:
     src: /bakerx/Monitoring/agent/
     dest: /agent
+    rsync_opts:
+      - "--exclude=node_modules"
 
 - name: Forever run the agent
   shell: "cd /agent && npm install && forever stopall && forever start index.js {{ group_names[0] }}"
+  environment:
+    HOST_MONITOR: "{{ groups.monitor[0] }}"

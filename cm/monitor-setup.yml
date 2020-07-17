@@ -14,8 +14,16 @@
 - hosts: monitor
   roles:
     - monitor
+  # tasks:
+  #   - name: Set env for checkbox and iTrust hosts
+  #     debug:
+  #       var: groups
 
 - hosts: checkbox, itrust
   roles:
     - agent
+  # tasks:
+  #   - name: Set env for checkbox and iTrust hosts
+  #     debug:
+  #       var: groups
 
