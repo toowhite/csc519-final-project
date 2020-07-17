@@ -3,6 +3,7 @@
 # https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
 
 - hosts: localhost
+
   tasks:
     - name: Set host_key_checking to false
       become: yes
@@ -12,6 +13,8 @@
         line: host_key_checking = false
 
 - hosts: monitor
+  vars_files:
+      - creds.yml
   roles:
     - monitor
   # tasks:
@@ -20,10 +23,12 @@
   #       var: groups
 
 - hosts: checkbox, itrust
+  vars_files:
+      - creds.yml
   roles:
     - agent
   # tasks:
   #   - name: Set env for checkbox and iTrust hosts
   #     debug:
-  #       var: groups
+  #       var: group_names
 

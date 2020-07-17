@@ -32,7 +32,7 @@ async function run(inventoryFile) {
     if (result.error) { console.log(result.error); process.exit(result.status); }
 
     console.log(chalk.blueBright('Running init script...'));
-    result = sshSync(`"chmod 700 ~/.ssh/id_rsa && ansible-playbook /bakerx/cm/monitor-setup.yml -i /bakerx/cm/${inventoryFile}"`, 'vagrant@192.168.33.20');
+    result = sshSync(`/bakerx/cm/monitor-server-init.sh ${inventoryFile}`, 'vagrant@192.168.33.20');
     if (result.error) { console.log(result.error); process.exit(result.status); }
 
 }

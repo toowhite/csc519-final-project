@@ -31,3 +31,4 @@
   shell: "cd /agent && npm install && forever stopall && forever start index.js {{ group_names[0] }}"
   environment:
     HOST_MONITOR: "{{ groups.monitor[0] }}"
+    REDIS_PASS: "{{ redis_password }}"

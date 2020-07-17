@@ -9,6 +9,23 @@
     update_cache: yes
   become: yes
 
+- name: Modify redis conf file to enable remote connection with password authentication
+  become: yes
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^requirepass', line: "requirepass {{ redis_password }}" }
+    - { regexp: '^bind', line: "bind 0.0.0.0 ::1" }
+  no_log: true
+
+- name: Restart redis server
+  systemd:
+    state: restarted
+    name: redis-server
+  become: yes
+
 - name: Install forever
   npm:
     name: forever
@@ -32,4 +49,5 @@
   environment:
     HOST_ITRUST: "{{ groups.itrust[0] }}"
     HOST_CHECKBOX: "{{ groups.checkbox[0] }}"
+    REDIS_PASS: "{{ redis_password }}"
 
