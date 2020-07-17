@@ -45,7 +45,7 @@ async function run() {
             inventoryDesc.push("[checkbox]");
             inventoryDesc.push(`${ip} ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_user=root\n`);
 
-            fs.writeFileSync("inventory.ini", inventoryDesc.join("\n"));
+            fs.writeFileSync("cm/inventory.ini", inventoryDesc.join("\n"));
             console.log(chalk.blueBright("Inventory file created successfully!"));
 
             exit(0);

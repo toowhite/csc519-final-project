@@ -3,6 +3,15 @@
 # https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
 
 - hosts: localhost
+  tasks:
+    - name: Set host_key_checking to false
+      become: yes
+      lineinfile:
+        path: /etc/ansible/ansible.cfg
+        regexp: '^#host_key_checking ='
+        line: host_key_checking = false
+
+- hosts: monitor
   roles:
     - monitor
 
