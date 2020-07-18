@@ -11,14 +11,6 @@
 ## Commands
 From project root directory, these commands can be executed:
 
--   **npm install**
-    
-    Install nodejs dependencies.
-
--   **npm link**
-    
-    Link the `pipeline` command.
-  
 -   **pipeline setup --gh-user \<username\> --gh-pass \<password\>**
     
     Setup jenkins and build environment for checkbox.io. `gh-user` and `gh-pass` are your NCSU Unity ID and password, respectively.
@@ -30,6 +22,24 @@ From project root directory, these commands can be executed:
 -   **pipeline useful-tests -c 100**
 
     Initiate analysis of test suite for iTrust to run `-c` numbers of times.
+
+-   **pipeline prod up**
+
+    Setup prod environment on DigitalOcean. Environment variables **NCSU_DOTOKEN** and **NCSU_SSH_KEY** should be set. Refer to below pages for instructions.
+    
+    - NCSU_DOTOKEN: https://www.digitalocean.com/docs/apis-clis/api/create-personal-access-token/
+    - NCSU_SSH_KEY: https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/to-account/ 
+      
+      Here we should set the **fingerprint** of the ssh key, which can be gotten from DO UI.
+      ![fingerprint](https://www.digitalocean.com/docs/images/droplets/ssh-account-key-added.cbbbb0fcd36f8e967ec4c998f1b1ffbe72b7c24a41a0ea43a9d3839979d9e77c.png)
+    
+    The command generates an ansible **inventory.ini** file under cm/ folder.
+
+-   **pipeline monitor-setup -i inventory.ini**
+
+    The command sets up monitoring tools on prod environment. We extended the code used in [Monitoring](https://github.com/CSC-DevOps/Monitoring) workshop. The git repo is https://github.ncsu.edu/cscdevops-summer2020/HW4-zli58/tree/forM3 (Notice the *forM3* branch).
+
+    Checkout the code into *./Monitoring* folder. Alternatively, you can checkout it elsewhere and [make a Junction](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/mklink) under the project folder.
 
 
 ## Experience (Milestone 2) 
