@@ -50,4 +50,5 @@
     HOST_ITRUST: "{{ groups.itrust[0] }}"
     HOST_CHECKBOX: "{{ groups.checkbox[0] }}"
     REDIS_PASS: "{{ redis_password }}"
+    PORT: 80
 
