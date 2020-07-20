@@ -27,15 +27,20 @@
   become: yes
 
 - name: Install forever
+  become: yes
   npm:
     name: forever
     global: yes
     state: present
 
-# - name: Remove dashboard folder (in case any conflict) 
-#   file:
-#     path: /dashboard
-#     state: absent
+- name: Create /dashboard with correct permissions
+  become: yes
+  file:
+    path: /dashboard
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0700"
 
 - name: Synchronize dashboard (excluding node_modules)
   synchronize:
@@ -45,6 +50,7 @@
       - "--exclude=node_modules"
     
 - name: Forever run the dashboard
+  become: yes
   shell: cd /dashboard && npm install && forever stopall && forever start bin/www
   environment:
     HOST_ITRUST: "{{ groups.itrust[0] }}"

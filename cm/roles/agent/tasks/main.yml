@@ -10,15 +10,20 @@
   become: yes
 
 - name: Install forever
+  become: yes
   npm:
     name: forever
     global: yes
     state: present
 
-# - name: Remove agent folder (in case any conflict) 
-#   file:
-#     path: /agent
-#     state: absent
+- name: Create /agent with correct permissions
+  become: yes
+  file:
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    path: /agent
+    state: directory
+    mode: "0700"
 
 - name: Synchronize agent (excluding node_modules)
   synchronize:
@@ -28,6 +33,7 @@
       - "--exclude=node_modules"
 
 - name: Forever run the agent
+  become: yes
   shell: "cd /agent && npm install && forever stopall && forever start index.js {{ group_names[0] }}"
   environment:
     HOST_MONITOR: "{{ groups.monitor[0] }}"
