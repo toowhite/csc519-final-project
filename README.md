@@ -37,7 +37,7 @@ From project root directory, these commands can be executed:
 
 -   **pipeline monitor-setup -i inventory.ini**
 
-    The command sets up monitoring tools on prod environment. We extended the code used in [Monitoring](https://github.com/CSC-DevOps/Monitoring) workshop. The git repo is https://github.ncsu.edu/cscdevops-summer2020/HW4-zli58/tree/forM3 (Notice the *forM3* branch).
+    The command sets up monitoring tools on prod environment. We extended the code used in [Monitoring](https://github.com/CSC-DevOps/Monitoring) workshop and developed the necessary monitoring tools. The git repo is https://github.ncsu.edu/zli58/Monitoring_for_M3.git.
 
     Checkout the code into *./Monitoring* folder. Alternatively, you can checkout it elsewhere and [make a Junction](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/mklink) under the project folder.
 
