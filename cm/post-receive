@@ -1,4 +1,4 @@
-GIT_WORK_TREE=/home/vagrant/checkbox/server-side git checkout -f
-cd /home/vagrant/checkbox/server-side/server-side/site && npm install
+GIT_WORK_TREE=/home/vagrant/checkbox git checkout -f
+cd /home/vagrant/checkbox/server-side/site && npm install
 forever stopall
-forever start ../server-side/site/server.js
+forever start server.js

@@ -102,7 +102,7 @@
 
 - name: Create checkbox.io server directory if it does not exist
   file:
-    path: /home/vagrant/checkbox/server-side
+    path: /home/vagrant/checkbox
     state: directory
     mode: '0755'
 
