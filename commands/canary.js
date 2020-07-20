@@ -42,4 +42,8 @@ async function run(master, broken) {
 
     result = child.spawnSync(`bakerx`, `run canary bionic --ip ${CANARY_IP} --sync`.split(' '), {shell:true, stdio: 'inherit'} );
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
+
+    console.log(chalk.blueBright('Running init script...'));
+    result = sshSync(`/bakerx/cm/run-ansible.sh canary-setup.yml inventory.canary.ini`, 'vagrant@192.168.33.20');
+    if (result.error) { console.log(result.error); process.exit(result.status); }
 }
