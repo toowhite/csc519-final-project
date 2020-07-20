@@ -5,9 +5,33 @@
     update_cache: yes
   become: yes
 
-- name: install other dependencies (apt)
+- name: install python-pip
   apt:
-    name: [python-pip, nodejs, npm, jq, nginx]
+    name: python-pip
+    update_cache: yes
+  become: yes
+
+- name: install nodejs
+  apt:
+    name: nodejs
+    update_cache: yes
+  become: yes
+
+- name: install npm
+  apt:
+    name: npm
+    update_cache: yes
+  become: yes
+
+- name: install jq
+  apt:
+    name: jq
+    update_cache: yes
+  become: yes
+
+- name: install nginx
+  apt:
+    name: nginx
     update_cache: yes
   become: yes
 
