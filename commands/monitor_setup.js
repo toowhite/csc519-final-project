@@ -27,10 +27,6 @@ exports.handler = async (argv) => {
 };
 
 async function run(inventoryFile) {
-    console.log(chalk.blueBright('Installing DigitalOcean privateKey on config server'));
-    result = scpSync(path.join(os.homedir(), '.ssh', 'id_rsa'), 'vagrant@192.168.33.20:/home/vagrant/.ssh/id_rsa');
-    if (result.error) { console.log(result.error); process.exit(result.status); }
-
     console.log(chalk.blueBright('Running init script...'));
     result = sshSync(`/bakerx/cm/monitor-server-init.sh ${inventoryFile}`, 'vagrant@192.168.33.20');
     if (result.error) { console.log(result.error); process.exit(result.status); }
