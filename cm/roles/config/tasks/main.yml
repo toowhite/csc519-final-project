@@ -96,3 +96,10 @@
       value: "{{ smtp_password }}"
     - key: MAVEN_OPTS
       value: '"-Xmx1024m -XX:MaxPermSize=128m"'
+
+- name: Turn off host key checking
+  replace:
+    path: /etc/ansible/ansible.cfg
+    regexp: '# host_key_checking = False'
+    replace: 'host_key_checking = False'
+  become: yes

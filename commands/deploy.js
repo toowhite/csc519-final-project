@@ -64,7 +64,11 @@ async function run(server, inventory) {
     result = scpSync (identifyFile, `${ansibleUser}@${ipAddress}:/home/vagrant/.ssh/mm_rsa`);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
+    console.log(chalk.blueBright(`Ensure appropriate permissions on ssh key for ${server}...`));
+    result = sshSync(`chmod 700 /home/vagrant/.ssh/mm_rsa`, `${ansibleUser}@${ipAddress}`);
+    if( result.error ) { console.log(result.error); process.exit( result.status ); }
+
     console.log(chalk.blueBright(`Running deploy playbook on config server for ${server}...`));
-    result = sshSync(`ansible-playbook /bakerx/cm/${server}-deploy.yml --vault-password-file=/home/vagrant/.vault-pass -i /bakerx/cm/${inventory}`, `${ansibleUser}@192.168.33.20`);
+    result = sshSync(`/bakerx/cm/${server}-deploy.sh /bakerx/cm/${inventory}`, `${ansibleUser}@192.168.33.20`);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 }
