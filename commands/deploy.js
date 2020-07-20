@@ -69,6 +69,6 @@ async function run(server, inventory) {
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright(`Running deploy playbook on config server for ${server}...`));
-    result = sshSync(`/bakerx/cm/${server}-deploy.sh /bakerx/cm/${inventory}`, `${ansibleUser}@192.168.33.20`);
+    result = sshSync(`/bakerx/cm/run-ansible.sh ${server}-deploy.sh ${inventory}`, `${ansibleUser}@192.168.33.20`);
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 }

@@ -14,6 +14,7 @@ sudo apt-get install ansible -y
 
 # Ensure security key has proper permissions
 chmod 700 ~/.ssh/mm_rsa
+chmod 700 ~/.ssh/id_rsa
 chmod +x /bakerx/cm/*.sh
 
 

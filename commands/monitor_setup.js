@@ -28,7 +28,7 @@ exports.handler = async (argv) => {
 
 async function run(inventoryFile) {
     console.log(chalk.blueBright('Running init script...'));
-    result = sshSync(`/bakerx/cm/monitor-server-init.sh ${inventoryFile}`, 'vagrant@192.168.33.20');
+    result = sshSync(`/bakerx/cm/run-ansible.sh monitor-setup.yml ${inventoryFile}`, 'vagrant@192.168.33.20');
     if (result.error) { console.log(result.error); process.exit(result.status); }
 
 }
