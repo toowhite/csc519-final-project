@@ -33,22 +33,6 @@
     global: yes
     state: present
 
-- name: Create /dashboard with correct permissions
-  become: yes
-  file:
-    path: /dashboard
-    state: directory
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_id }}"
-    mode: "0700"
-
-- name: Synchronize dashboard (excluding node_modules)
-  synchronize:
-    src: /bakerx/Monitoring/dashboard/
-    dest: /dashboard
-    rsync_opts:
-      - "--exclude=node_modules"
-
 - name: Stop all forever run jobs
   become: yes
   shell: forever stopall
@@ -58,11 +42,11 @@
   npm: 
     path: "{{ item }}"
   with_items:
-    - /dashboard
+    - /bakerx/Monitoring/dashboard
     
 - name: Forever run the dashboard
   become: yes
-  shell: cd /dashboard && forever start bin/www
+  shell: cd /bakerx/Monitoring/dashboard && forever start bin/www
   environment:
     HOST_BROKEN: "{{ groups.broken[0] }}"
     HOST_MASTER: "{{ groups.master[0] }}"

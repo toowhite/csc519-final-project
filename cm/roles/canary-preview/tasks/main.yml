@@ -16,27 +16,11 @@
     global: yes
     state: present
 
-- name: Create /agent with correct permissions
-  become: yes
-  file:
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_id }}"
-    path: /agent
-    state: directory
-    mode: "0700"
-
-- name: Synchronize agent (excluding node_modules)
-  synchronize:
-    src: /bakerx/Monitoring/agent/
-    dest: /agent
-    rsync_opts:
-      - "--exclude=node_modules"
-
 - name: Clone preview code
   become: yes
   git:
     repo: https://github.com/chrisparnin/checkbox.io-micro-preview.git
-    dest: ~/checkbox.io-micro-preview
+    dest: /checkbox.io-micro-preview
 
 
 - name: Install node dependencies
@@ -44,7 +28,7 @@
   npm: 
     path: "{{ item }}"
   with_items:
-    - /agent
+    - /bakerx/Monitoring/agent
     - /checkbox.io-micro-preview
 
 - name: Stop all forever run jobs
@@ -53,7 +37,7 @@
 
 - name: Forever run agent
   become: yes
-  shell: "cd /agent && forever start index.js {{ group_names[0] }}"
+  shell: "cd /bakerx/Monitoring/agent && forever start index.js {{ group_names[0] }}"
   environment:
     HOST_MONITOR: "{{ groups.proxy[0] }}"
     REDIS_PASS: "{{ redis_password }}"
