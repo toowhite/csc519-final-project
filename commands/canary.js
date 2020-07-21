@@ -40,7 +40,7 @@ async function run(master, broken) {
     result = child.spawnSync(`bakerx`, `run ${broken} bionic --ip ${BROKEN_IP} --sync`.split(' '), {shell:true, stdio: 'inherit'} );
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
-    result = child.spawnSync(`bakerx`, `run canary bionic --ip ${CANARY_IP} --sync`.split(' '), {shell:true, stdio: 'inherit'} );
+    result = child.spawnSync(`bakerx`, `run proxy bionic --ip ${CANARY_IP} --sync`.split(' '), {shell:true, stdio: 'inherit'} );
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright('Running init script...'));

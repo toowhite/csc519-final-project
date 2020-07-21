@@ -1,0 +1,60 @@
+---
+
+- name: Add nodejs latest binary source
+  shell: curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+
+- name: Install dependencies
+  apt:
+    name: [nodejs, redis-server, python-apt]
+    update_cache: yes
+  become: yes
+
+- name: Modify redis conf file to enable remote connection with password authentication
+  become: yes
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^requirepass', line: "requirepass {{ redis_password }}" }
+    - { regexp: '^bind', line: "bind 0.0.0.0 ::1" }
+  no_log: true
+
+- name: Restart redis server
+  systemd:
+    state: restarted
+    name: redis-server
+  become: yes
+
+- name: Install forever
+  become: yes
+  npm:
+    name: forever
+    global: yes
+    state: present
+
+- name: Create /dashboard with correct permissions
+  become: yes
+  file:
+    path: /dashboard
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0700"
+
+- name: Synchronize dashboard (excluding node_modules)
+  synchronize:
+    src: /bakerx/Monitoring/dashboard/
+    dest: /dashboard
+    rsync_opts:
+      - "--exclude=node_modules"
+    
+- name: Forever run the dashboard
+  become: yes
+  shell: cd /dashboard && npm install && forever stopall && forever start bin/www
+  environment:
+    HOST_BROKEN: "{{ groups.broken[0] }}"
+    HOST_MASTER: "{{ groups.master[0] }}"
+    REDIS_PASS: "{{ redis_password }}"
+    PORT: 80
+
