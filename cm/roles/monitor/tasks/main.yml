@@ -48,10 +48,21 @@
     dest: /dashboard
     rsync_opts:
       - "--exclude=node_modules"
+
+- name: Stop all forever run jobs
+  become: yes
+  shell: forever stopall
+
+- name: Install node dependencies
+  become: yes
+  npm: 
+    path: "{{ item }}"
+  with_items:
+    - /dashboard
     
 - name: Forever run the dashboard
   become: yes
-  shell: cd /dashboard && npm install && forever stopall && forever start bin/www
+  shell: cd /dashboard && forever start bin/www
   environment:
     HOST_ITRUST: "{{ groups.itrust[0] }}"
     HOST_CHECKBOX: "{{ groups.checkbox[0] }}"

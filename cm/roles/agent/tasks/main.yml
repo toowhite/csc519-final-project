@@ -32,9 +32,20 @@
     rsync_opts:
       - "--exclude=node_modules"
 
+- name: Stop all forever run jobs
+  become: yes
+  shell: forever stopall
+
+- name: Install node dependencies
+  become: yes
+  npm: 
+    path: "{{ item }}"
+  with_items:
+    - /agent
+
 - name: Forever run the agent
   become: yes
-  shell: "cd /agent && npm install && forever stopall && forever start index.js {{ group_names[0] }}"
+  shell: "cd /agent && forever start index.js {{ group_names[0] }}"
   environment:
     HOST_MONITOR: "{{ groups.monitor[0] }}"
     REDIS_PASS: "{{ redis_password }}"
