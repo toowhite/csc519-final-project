@@ -26,3 +26,12 @@
     owner: bin
     mode: u=rwx,g=r,o=r
   become: yes
+
+- name: Template ssh configuration file
+  template:
+    src: ssh_config
+    dest: /home/vagrant/.ssh/config
+    owner: vagrant
+    group: vagrant
+    mode: u=rw,g=rw,o=r
+  become: yes
