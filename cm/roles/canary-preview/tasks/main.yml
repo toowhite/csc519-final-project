@@ -32,9 +32,34 @@
     rsync_opts:
       - "--exclude=node_modules"
 
-- name: Forever run the agent
+- name: Clone preview code
   become: yes
-  shell: "cd /agent && npm install && forever stopall && forever start index.js {{ group_names[0] }}"
+  git:
+    repo: https://github.com/chrisparnin/checkbox.io-micro-preview.git
+    dest: ~/checkbox.io-micro-preview
+
+
+- name: Install node dependencies
+  become: yes
+  npm: 
+    path: "{{ item }}"
+  with_items:
+    - /agent
+    - /checkbox.io-micro-preview
+
+- name: Stop all forever run jobs
+  become: yes
+  shell: forever stopall
+
+- name: Forever run agent
+  become: yes
+  shell: "cd /agent && forever start index.js {{ group_names[0] }}"
   environment:
     HOST_MONITOR: "{{ groups.proxy[0] }}"
     REDIS_PASS: "{{ redis_password }}"
+
+- name: Forever run preview
+  become: yes
+  shell: "cd /checkbox.io-micro-preview && forever start index.js"
+
+
