@@ -30,7 +30,7 @@ exports.handler = async (argv) => {
 
 let MASTER_IP = "192.168.33.30";
 let BROKEN_IP = "192.168.33.31";
-let CANARY_IP = "192.168.33.32";
+let PROXY_IP = "192.168.33.32";
 
 async function run(master, broken) {
     console.log(chalk.blueBright('Provisioning needed servers...'));
@@ -40,10 +40,18 @@ async function run(master, broken) {
     result = child.spawnSync(`bakerx`, `run ${broken} bionic --ip ${BROKEN_IP} --sync`.split(' '), {shell:true, stdio: 'inherit'} );
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
-    result = child.spawnSync(`bakerx`, `run proxy bionic --ip ${CANARY_IP} --sync`.split(' '), {shell:true, stdio: 'inherit'} );
+    result = child.spawnSync(`bakerx`, `run proxy bionic --ip ${PROXY_IP} --sync`.split(' '), {shell:true, stdio: 'inherit'} );
     if( result.error ) { console.log(result.error); process.exit( result.status ); }
 
     console.log(chalk.blueBright('Running init script...'));
     result = sshSync(`/bakerx/cm/run-ansible.sh canary-setup.yml inventory.canary.ini`, 'vagrant@192.168.33.20');
     if (result.error) { console.log(result.error); process.exit(result.status); }
+
+    console.log(chalk.redBright('Be patient. It takes more than 2 minutes to generate the report.'));
+    setTimeout(() => {
+        console.log(chalk.blueBright('Try getting test result...'));
+        result = sshSync(`sudo cat /dashboard/result.txt`, `vagrant@${PROXY_IP}`);
+        if (result.error) { console.log(result.error); process.exit(result.status); }
+    
+    }, (60 + 60 + 5) * 1000);
 }
