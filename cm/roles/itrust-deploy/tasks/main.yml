@@ -1,0 +1,9 @@
+- name: copy war file to iTrust server
+  copy:
+    src: /bakerx/cm/iTrust2.war
+    dest: /home/vagrant/iTrust2.war
+    owner: vagrant
+    group: vagrant
+    force: yes
+    mode: u=rwx,g=x,o=x
+  become: yes
