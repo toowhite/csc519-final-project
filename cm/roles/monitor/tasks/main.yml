@@ -5,7 +5,7 @@
 
 - name: Install dependencies
   apt:
-    name: [nodejs, redis-server]
+    name: [nodejs, redis-server, python-apt]
     update_cache: yes
   become: yes
 
