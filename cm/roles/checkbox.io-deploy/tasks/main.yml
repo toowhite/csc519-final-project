@@ -35,6 +35,12 @@
     update_cache: yes
   become: yes
 
+- name: Ensure nginx running
+  systemd:
+    name: nginx
+    state: started
+  become: yes
+
 - name: apt update
   shell: sudo apt update
 
@@ -118,12 +124,6 @@
 - name: Source the /etc/environment file
   shell: . /etc/environment
 
-- name: Ensure nginx running
-  systemd:
-    name: nginx
-    state: started
-  become: yes
-
 - name: Create checkbox.io server directory if it does not exist
   file:
     path: /home/vagrant/checkbox
@@ -156,4 +156,10 @@
     name: forever
     global: yes
     state: present
+  become: yes
+
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted
   become: yes

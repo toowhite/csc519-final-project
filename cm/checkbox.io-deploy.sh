@@ -20,5 +20,3 @@ if [ ! -d "/home/vagrant/check" ]; then
     git remote add checkbox ssh://vagrant@192.168.33.23/home/vagrant/checkbox/.git
     git push checkbox master
 fi
-
-ansible-playbook /bakerx/cm/nginx.yml --vault-password-file=/home/vagrant/.vault-pass -i $1
