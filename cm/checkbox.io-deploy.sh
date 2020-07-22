@@ -15,8 +15,9 @@ if [ ! -d "/home/vagrant/check" ]; then
     cd check
     git clone https://github.com/chrisparnin/checkbox.io.git
     cd checkbox.io
-    export GIT_SSH_COMMAND="ssh -i ~/.ssh/mm_rsa -o StrictHostKeyChecking=no"
-    #TODO update for possibility of remote host
-    git remote add checkbox ssh://vagrant@"$2"/home/vagrant/checkbox/.git
+    export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no"
+    git remote add checkbox ssh://"$3"@"$2"/home/vagrant/checkbox/.git
     git push checkbox master
 fi
+
+rm -rf /home/vagrant/check

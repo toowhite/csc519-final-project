@@ -1,25 +1,7 @@
 ---
-- name: install python3
+- name: install python-pip
   apt:
-    name: python3
-    update_cache: yes
-  become: yes
-
-- name: install python3-pip
-  apt:
-    name: python3-pip
-    update_cache: yes
-  become: yes
-
-- name: install nodejs
-  apt:
-    name: nodejs
-    update_cache: yes
-  become: yes
-
-- name: install npm
-  apt:
-    name: npm
+    name: python-pip
     update_cache: yes
   become: yes
 
@@ -48,13 +30,13 @@
   copy:
     src: /bakerx/cm/default
     dest: /etc/nginx/sites-enabled/default
-    owner: vagrant
-    group: vagrant
+    owner: root
+    group: root
     force: yes
     mode: u=rw,g=r,o=r
   become: yes
 
-- name: Import the MongoDB public GPG Key 
+- name: Import the MongoDB public GPG Key
   become: yes
   shell: wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
 
@@ -98,7 +80,7 @@
     login_user: "{{ mongodb_admin_user }}"
     login_password: "{{ mongodb_admin_password }}"
     state: present
-    roles: 
+    roles:
       - { "db": "site", "role": "readWrite"}
 
 - name: Populate /etc/environment
@@ -110,15 +92,15 @@
     line: "{{ item.key }}={{ item.value}}"
   no_log: true
   with_items:
-    - key: APP_PORT 
+    - key: APP_PORT
       value: 3002
-    - key: MONGO_PORT 
+    - key: MONGO_PORT
       value: 27017
-    - key: MONGO_USER 
+    - key: MONGO_USER
       value: "{{ mongodb_app_user }}"
-    - key: MONGO_PASSWORD 
+    - key: MONGO_PASSWORD
       value: "{{ mongodb_app_password }}"
-    - key: MONGO_IP 
+    - key: MONGO_IP
       value: localhost
 
 - name: Source the /etc/environment file
@@ -145,17 +127,10 @@
   copy:
     src: /bakerx/cm/post-receive
     dest: /home/vagrant/checkbox/.git/hooks/post-receive
-    owner: vagrant
-    group: vagrant
+    owner: root
+    group: root
     force: yes
     mode: u=rwx,g=x,o=x
-  become: yes
-
-- name: Install forever
-  npm:
-    name: forever
-    global: yes
-    state: present
   become: yes
 
 - name: restart nginx
