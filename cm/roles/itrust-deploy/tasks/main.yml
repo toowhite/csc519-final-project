@@ -1,7 +1,7 @@
 - name: Install python3-pip, python-apt
   become: yes
   apt:
-    name: [python-pip, python-apt]
+    name: [python3-pip, python-apt]
     state: present
     update_cache: yes
 
@@ -12,7 +12,7 @@
 - name: Install mysql-server and maven
   become: yes
   apt:
-    name: [python-pip, python-apt, mysql-server, maven]
+    name: [mysql-server, maven]
     state: present
     update_cache: yes
 
@@ -27,7 +27,6 @@
     src: /bakerx/cm/itrust.sql
     dest: /home/vagrant/itrust.sql
     force: yes
-    remote_src: yes
   become: yes
 
 - name: Update and upgrade apt packages
