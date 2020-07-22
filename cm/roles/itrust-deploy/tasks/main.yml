@@ -21,14 +21,6 @@
   pip:
     name: [pymysql]
 
-
-- name: copy mysql database dump file to itrust
-  copy:
-    src: /bakerx/cm/itrust.sql
-    dest: /home/vagrant/itrust.sql
-    force: yes
-  become: yes
-
 - name: Update and upgrade apt packages
   apt:
     upgrade: yes
@@ -125,3 +117,18 @@
 - name: Ensure mysql running
   become: yes
   systemd: name=mysql state=started
+
+- name: copy mysql database dump file to itrust
+  copy:
+    src: /bakerx/cm/itrust.sql
+    dest: /home/vagrant/itrust.sql
+    force: yes
+  become: yes
+
+- name: add iTrust2 database
+  mysql_db:
+    name: iTrust2
+    state: import
+    target: /home/vagrant/itrust.sql
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
