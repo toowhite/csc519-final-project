@@ -1,7 +1,7 @@
-- name: Install python3-pip, python-apt
+- name: Install python-pip, python-apt
   become: yes
   apt:
-    name: [python3-pip, python-apt]
+    name: [python-pip, python-apt]
     state: present
     update_cache: yes
 
@@ -117,7 +117,7 @@
 - name: copy mysql database dump file to itrust
   copy:
     src: /bakerx/cm/itrust.sql
-    dest: /home/vagrant/itrust.sql
+    dest: "{{ ansible_env.HOME }}"
     force: yes
   become: yes
 
@@ -125,7 +125,7 @@
   mysql_db:
     name: iTrust2
     state: import
-    target: /home/vagrant/itrust.sql
+    target: "{{ ansible_env.HOME }}/itrust.sql"
     login_user: root
     login_password: "{{ mysql_root_password }}"
 
