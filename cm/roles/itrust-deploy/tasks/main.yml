@@ -5,10 +5,6 @@
     state: present
     update_cache: yes
 
-
-
-
-
 - name: Install mysql-server and maven
   become: yes
   apt:
@@ -66,8 +62,8 @@
   copy:
     src: /bakerx/cm/iTrust2.war
     dest: /opt/tomcat/webapps/iTrust2.war
-    owner: vagrant
-    group: vagrant
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
     force: yes
     mode: u=rwx,g=x,o=x
   become: yes
@@ -132,3 +128,10 @@
     target: /home/vagrant/itrust.sql
     login_user: root
     login_password: "{{ mysql_root_password }}"
+
+- name: Start and enable Tomcat service
+  systemd:
+    name: tomcat
+    state: restarted
+    enabled: true
+  become: yes
