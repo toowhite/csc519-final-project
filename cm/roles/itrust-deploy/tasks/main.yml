@@ -66,6 +66,14 @@
     # mode: 0755
   # become: yes /opt/tomcat/webapps
 
+- name: Template the tomcat server config file
+  template:
+    src: tomcat
+    dest: /etc/systemd/system/tomcat.service
+    owner: tomcat
+    mode: u=rwx,g=r,o=r
+  become: yes
+
 - name: Start and enable Tomcat service
   systemd:
     name: tomcat
@@ -73,6 +81,3 @@
     enabled: true
     daemon_reload: true
   become: yes
-  become_user: vagrant
-  
-  
