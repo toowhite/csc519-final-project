@@ -35,3 +35,12 @@
     group: vagrant
     mode: u=rw,g=rw,o=r
   become: yes
+
+- name: Template mysql configuration file for database dump
+  template:
+    src: mysql
+    dest: /home/vagrant/.my.cnf
+    owner: vagrant
+    group: vagrant
+    mode: u=rw
+  become: yes

@@ -7,10 +7,12 @@
         dest: /bakerx/cm/iTrust2.war
         remote_src: yes
 
+    - name: database dump
+      shell: umask 022; mysqldump -u root iTrust2 > /bakerx/cm/itrust.sql
+
+
 - hosts: itrust
   vars_files:
     - creds.yml
   roles:
     - itrust-deploy
-
-      
