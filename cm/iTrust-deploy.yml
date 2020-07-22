@@ -7,7 +7,7 @@
         dest: /bakerx/cm/iTrust2.war
         remote_src: yes
 
-- hosts: iTrust
+- hosts: itrust
   vars_files:
     - creds.yml
   roles:
