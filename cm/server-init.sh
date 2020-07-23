@@ -7,6 +7,7 @@ set -e
 set -x
 
 # Script used to initialize your ansible server after provisioning.
+sudo rm /var/lib/dpkg/lock-frontend
 sudo add-apt-repository ppa:ansible/ansible -y
 sudo apt-get update
 sudo apt-get upgrade --assume-yes
