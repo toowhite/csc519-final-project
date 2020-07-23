@@ -55,6 +55,8 @@ async function run() {
         }
         catch(err) {
             console.error(err);
+            console.log(chalk.green("Don't worry, will try again 5 seconds later until succeed."));
+            inventoryDesc = [];
         }
     }, 5000);
 }
