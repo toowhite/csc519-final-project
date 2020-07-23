@@ -127,8 +127,8 @@
   copy:
     src: /bakerx/cm/post-receive
     dest: /home/vagrant/checkbox/.git/hooks/post-receive
-    owner: root
-    group: root
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     force: yes
     mode: u=rwx,g=x,o=x
   become: yes

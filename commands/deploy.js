@@ -65,7 +65,9 @@ async function run(server, inventory) {
 
     console.log(chalk.greenBright(`deploying ${server}...`));
 
+    let wrappedKeyPath = `\"${ansiblePrivateKeyPath}\"`
+
     console.log(chalk.blueBright(`Running deploy playbook on config server for ${server}...`));
-    result = sshSync(`/bakerx/cm/${server}-deploy.sh /bakerx/cm/${inventory} ${ipAddress} ${ansibleUser}`, `vagrant@192.168.33.20`);
+    result = sshSync(`/bakerx/cm/${server}-deploy.sh /bakerx/cm/${inventory} ${ipAddress} ${ansibleUser} ${wrappedKeyPath}`, `vagrant@192.168.33.20`);
     if (result.error) {console.log(result.error);process.exit(result.status);}
 }
