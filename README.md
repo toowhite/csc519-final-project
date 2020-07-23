@@ -46,7 +46,7 @@ From project root directory, these commands can be executed:
 
 -   **pipeline canary master broken**
 
-    This command triggers canary analysis on *broken* service against *master* service. A report indicated metric classfications and canary score will be output, after roughly 2 minuites. 
+    This command triggers canary analysis on *broken* service against *master* service. A report indicated metric classfications and canary score will be output, after roughly 2 minuites. **Before running the command, remember to switch to the *canary* branch of *Monitoring_for_M3* repo.**
 
 ## Experience (Milestone 3)
 
