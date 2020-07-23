@@ -2,6 +2,7 @@ const child = require('child_process');
 const chalk = require('chalk');
 const path = require('path');
 const os = require('os');
+const fs = require('fs');
 
 const scpSync = require('../lib/scp');
 const sshSync = require('../lib/ssh');
@@ -51,10 +52,12 @@ async function run(privateKey, ghuser, ghpass) {
     result = scpSync (localIdentifyFile, 'vagrant@192.168.33.20:/home/vagrant/.ssh/mm_rsa');
     if( result.error || result.status != 0 ) { console.log(`Error code: ${result.status}`); console.log(result.error); process.exit( result.status ); }
 
-    console.log(chalk.blueBright('Installing DigitalOcean private key on config server'));
     let doIdentifyFile = path.join(os.homedir(), '.ssh', 'id_rsa');
-    result = scpSync(doIdentifyFile, 'vagrant@192.168.33.20:/home/vagrant/.ssh/id_rsa');
-    if( result.error || result.status != 0 ) { console.log(`Error code: ${result.status}`); console.log(result.error); process.exit( result.status ); }
+    if (fs.existsSync(doIdentifyFile)) {
+        console.log(chalk.blueBright('Installing DigitalOcean private key on config server'));
+        result = scpSync(doIdentifyFile, 'vagrant@192.168.33.20:/home/vagrant/.ssh/id_rsa');
+        if( result.error || result.status != 0 ) { console.log(`Error code: ${result.status}`); console.log(result.error); process.exit( result.status ); }
+    }
 
     console.log(chalk.blueBright('Copying over vault password file to config server'));
     let vaultPasswordFile = path.join(os.homedir(), '.ansible', '.vault-pass');
