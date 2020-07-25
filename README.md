@@ -1,7 +1,7 @@
 # DevOps-1
 ## Screencast and results
 ### Milestone 3
-// TODO
+checkbox.io cloud deployment screencast: https://drive.google.com/file/d/1Qurxt5fHTbw4axHGLDPzaeTsldr4O93H/view?usp=sharing
 
 ### Milestone 2
 - Results after running `pipeline useful-tests -c 100`: https://github.ncsu.edu/cscdevops-summer2020/DevOps-1/blob/master/result.txt
@@ -52,14 +52,25 @@ From project root directory, these commands can be executed:
 
 ### Andrew Miller
 
-// TODO
+- reverse proxy concepts, and how to automate the configuration of nginx for a node.js app.
+- configuring a jenkins pipeline to package a war file based on the success of previous pipeline steps.
+- automation of application deployment with forever and git hooks.
+- automation of the deployment of a java application with tomcat.
+- automation of dumping and importing a mysql database from one server to another.
 
 ### Zhuowei Li
 
-// TODO
+- Overall I think this workshop is quite challenging, but also I learned a lot.
+  - I learned how to organize large numbers of anisble and bash scripts in a logical way. 
+  - I learned how to write more robust Nodejs scripts, like modularization, error handling, etc.
+  - I learned to use branch to organize different features of a repository.
 
 ### Qingyan Wang
 
-// TODO
+- Tomcat configuration and deployment with war file using ansible-playbook. Users difference between root and vagrant need to be cared.
+- Capital letters iTrust needs to be taken care in js commandline, sh file and playbooks.
+- The mm_rsa and id_rsa files for local and Digital Ocean authentication is created in setup pipeline. But DO will need DOTOKEN and SSH_KEY for access DO API. These are set as environmental variales.
+- From local deployment to DO deployment, some configurations change because user and environment changed.
+- If ansible is suffering a long time on gathering facts, add a gather_timeout parameter to 30 secs in ansible.cfg.
 
 ## Old experiences can be find in [Experience Archive](ExperienceArchive.md)
