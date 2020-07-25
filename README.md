@@ -46,7 +46,14 @@ From project root directory, these commands can be executed:
 
 -   **pipeline deploy**
     
-    //TODO
+    **pipeline build iTrust -u <admin> -p <admin>**
+    Creates a deployable war file for the iTrust2 application.
+  
+    **pipeline deploy iTrust -i inventory.ini**
+    Configures the host server for iTrust2 specified in inventory.ini and deploys iTrust2 to this server.
+    
+    **pipeline deploy checkbox.io -i inventory.ini**
+    Configures the host server for checkbox.io specified in inventory.ini and deploys checkbox.io to this server.
 
 -   **pipeline canary master broken**
 
