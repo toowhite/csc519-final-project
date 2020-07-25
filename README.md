@@ -1,7 +1,11 @@
 # DevOps-1
 ## Screencast and results
 ### Milestone 3
-checkbox.io cloud deployment screencast: https://drive.google.com/file/d/1Qurxt5fHTbw4axHGLDPzaeTsldr4O93H/view?usp=sharing
+- Screencast: https://youtu.be/s8HzEcTs4hM
+
+  checkbox.io deployment failed when recording the screencast, therefore we have a separated recording for it.
+  
+- checkbox.io cloud deployment screencast: https://drive.google.com/file/d/1Qurxt5fHTbw4axHGLDPzaeTsldr4O93H/view?usp=sharing
 
 ### Milestone 2
 - Results after running `pipeline useful-tests -c 100`: https://github.ncsu.edu/cscdevops-summer2020/DevOps-1/blob/master/result.txt
