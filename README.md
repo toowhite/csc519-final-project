@@ -19,7 +19,7 @@
 From project root directory, these commands can be executed:
 
 -   **pipeline setup --gh-user \<username\> --gh-pass \<password\>**
-    
+
     Setup jenkins and build environment. `gh-user` and `gh-pass` are your NCSU Unity ID and password, respectively.
   
 -   **pipeline build \<jobName\> -u \<admin\> -p \<admin\>**
@@ -46,14 +46,17 @@ From project root directory, these commands can be executed:
 
 -   **pipeline deploy**
     
-    **pipeline build iTrust -u <admin> -p <admin>**
-    Creates a deployable war file for the iTrust2 application.
+    - **pipeline build iTrust -u <admin> -p <admin>**
+      <br/>
+      Creates a deployable war file for the iTrust2 application.
   
-    **pipeline deploy iTrust -i inventory.ini**
-    Configures the host server for iTrust2 specified in inventory.ini and deploys iTrust2 to this server.
+    - **pipeline deploy iTrust -i inventory.ini**
+      <br/>
+      Configures the host server for iTrust2 specified in inventory.ini and deploys iTrust2 to this server.
     
-    **pipeline deploy checkbox.io -i inventory.ini**
-    Configures the host server for checkbox.io specified in inventory.ini and deploys checkbox.io to this server.
+    - **pipeline deploy checkbox.io -i inventory.ini**
+      <br/>
+      Configures the host server for checkbox.io specified in inventory.ini and deploys checkbox.io to this server.
 
 -   **pipeline canary master broken**
 
@@ -72,10 +75,9 @@ From project root directory, these commands can be executed:
 ### Zhuowei Li
 
 - Overall I think this workshop is quite challenging, but also I learned a lot.
-- I learned how to organize large numbers of anisble and bash scripts in a logical way. 
-- I learned how to write more robust Nodejs scripts, like modularization, error handling, etc.
-- I learned to use branch to organize different features of a repository.
-- For the canary analysis task, I learned how to use Mann-Whitney U test in the context of determining whether the metrics of 2 servers are significantly different.
+  - I learned how to organize large numbers of anisble and bash scripts in a logical way. 
+  - I learned how to write more robust Nodejs scripts, like modularization, error handling, etc.
+  - I learned to use branch to organize different features of a repository.
 
 ### Qingyan Wang
 
