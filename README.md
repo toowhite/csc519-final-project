@@ -72,9 +72,10 @@ From project root directory, these commands can be executed:
 ### Zhuowei Li
 
 - Overall I think this workshop is quite challenging, but also I learned a lot.
-  - I learned how to organize large numbers of anisble and bash scripts in a logical way. 
-  - I learned how to write more robust Nodejs scripts, like modularization, error handling, etc.
-  - I learned to use branch to organize different features of a repository.
+- I learned how to organize large numbers of anisble and bash scripts in a logical way. 
+- I learned how to write more robust Nodejs scripts, like modularization, error handling, etc.
+- I learned to use branch to organize different features of a repository.
+- For the canary analysis task, I learned how to use Mann-Whitney U test in the context of determining whether the metrics of 2 servers are significantly different.
 
 ### Qingyan Wang
 
